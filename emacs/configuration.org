@@ -1,0 +1,312 @@
+
+#+TITLE: Configuración de Emacs
+
+* Motivación
+  
+  Una vez que uno decide utilizar *emacs* como editor de texto, una de las cosas que debe hacer es personalizar el editor según nuestras preferencias. Para ello es necesario editar el archivo *~/.emacs* y entonces comienzan los problemas. Van a encontrar miles y miles de ejemplos de este archivo de configuración, con miles de configuraciones y comandos diferentes y se hace extremadamente tedioso entender y aprender cuáles son las que nos van a servir o que nos convendría utilizar.
+  
+  Un problema muy común con el archivo .emacs es que rápidamente se va saliendo de control y al cabo de un tiempo ya no se sabe qué hace cada parte y empieza a aparecer una especie de miedo supersticioso a modificar las preferencias, que se traduce en una tendencia a mantener bloques que ya uno se olvidó qué hacen pero que siguen conservando "para no romper lo que me está funcionando".
+  
+  Cada vez que intenté utilizar emacs como mi editor principal tuve este problema, y era una fuente importante de mi frustración con el uso del editor. Por suerte hubo gente que lo solucionó de una manera muy elegante y que permite realizar lo que Donald Knuth denominó "Literate Programming", es decir, un programa que en realidad es documentación ejecutable, que se lee como un documento para que los seres humanos lo puedan entender y que al mismo tiempo es código fuente para que la máquina (emacs) lo pueda ejecutar.
+  
+  Básicamente la solución consiste en utilizar *org-mode*, que es un modo mayor de emacs para escribir documentos y listas de tareas, y que permite incorporar bloques de código dentro de un documento. La ventaja principal que tiene este modo es que se puede visualizar el documento de manera jerárquica, con nodos y subnodos que se pueden ir abriendo y ocultando según se requiera.
+  
+  Si abrieran con emacs este archivo, que tiene todas mis preferencias de configuración, van a ver un listado similar al siguiente:
+  
+  #+BEGIN_QUOTE
+- Motivación
+- Información Personal
+- Repositorios de Paquetes
+- Backups e Historial
+- Apariencia
+- Edición de Texto
+- Movimiento del Cursor
+- Teclado
+- Paquetes Varios
+  #+END_QUOTE
+  
+  Cada uno de los títulos del documento es una sección que se puede abrir con la tecla TAB (y cerrarla con Shift-TAB) para examinarla en detalle, con sub-ítems que contienen los diferentes bloques de código que configuran las diversas funcionalidades del editor de acuerdo a mis preferencias.
+  
+  En el archivo *~/.emacs* ahora lo único que me queda es una llamada a la función *org-babel-load-file* que lo que hace es cargar el archivo *configuration.org* y ejecutarlo cada vez que se inicia el editor.
+  
+  De esta manera, me queda un documento que me explica en detalle qué hace cada una de las opciones y que está ordenado, que es fácil de navegar y sobre todo de modificar. Ahora puedo entender qué hace cada opción, porque cada sección y cada ítem me indica qué es lo que hace el bloque de código correspondiente. Y si existe una opción que no tiene sentido o que he dejado de utilizar, puedo cambiarla o incluso borrarla sin miedo a afectar el comportamiento general del editor.
+  
+** Algunos links que utilicé como inspiración
+
+- https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
+- https://www.masteringemacs.org/article/my-emacs-keybindings
+- https://www.masteringemacs.org/article/spotlight-use-package-a-declarative-configuration-tool
+- http://pages.sachachua.com/.emacs.d/Sacha.html#orgc27e81e
+- https://github.com/bbatsov/emacs.d/blob/master/init.el
+- https://www.philnewton.net/guides/emacs-as-a-php-editor/
+- https://github.com/bbatsov/prelude
+
+* Información Personal
+
+  En esta sección se registra el nombre y el email del usuario en dos variables globales a las que luego se puede hacer referencia desde diferentes scripts.
+
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "Martín Alsinet"
+      user-mail-address "malsinet@gmail.com")
+#+END_SRC
+
+* Repositorios de Paquetes
+
+  Esta sección configura las fuentes de paquetes que utiliza el editor. Se agrega el repositorio de MELPA (melpa.org) al listado de paquetes por defecto (elpa.gnu.org). Además se instala el paquete *use-package* (si aún no ha sido instalado) que simplifica la carga y el uso de paquetes en el resto del archivo de configuración.
+
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives 
+               '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize)
+
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+#+END_SRC
+
+* Backups e Historial
+
+  Tengo que analizar la posibilidad de eliminar los backups y el historial. No los uso.
+
+** Backups
+
+- Establece la carpeta para guardar los backups
+- Desactiva el borrado de versiones viejas
+- Activa el control de versiones
+- Activa el backup de los archivos bajo control de versiones
+- Activa de guardado automático 
+
+#+BEGIN_SRC emacs-lisp
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+(setq delete-old-versions -1)
+(setq version-control t)
+(setq vc-make-backup-files t)
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+#+END_SRC
+
+** Historial
+
+#+BEGIN_SRC emacs-lisp
+(setq savehist-file "~/.emacs.d/savehist")
+(savehist-mode 1)
+(setq history-length t)
+(setq history-delete-duplicates t)
+(setq savehist-save-minibuffer-history 1)
+(setq savehist-additional-variables
+      '(kill-ring
+        search-ring
+        regexp-search-ring))
+#+END_SRC
+  
+* Apariencia
+  
+  En esta sección puse las preferencias que tienen que ver con el aspecto visual del editor. Uso emacs desde una terminal y me manejo para todo con el teclado, por lo tanto no necesito ocupar espacio de la pantalla con barras de menú o herramientas, y además le desactivo todos los sonidos porque me parecen muy molestos.
+
+  Como conjunto de colores utilizo el *zenburn-theme*, que es conjunto de colores obscuro (letras en blanco y en color sobre un fondo negro) que cansa menos la vista que el conjunto por defecto (letras en negro y en color sobre un fondo blanco).
+  
+** Desactivar ventanas y menús
+
+#+BEGIN_SRC emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+; (scroll-bar-mode -1)
+#+END_SRC
+
+** Desactivar sonidos
+
+#+BEGIN_SRC emacs-lisp
+(setq visible-bell 1)
+(setq ring-bell-function 'ignore)
+#+END_SRC
+
+** Cargar zenburn-theme
+
+#+BEGIN_SRC emacs-lisp
+(use-package zenburn-theme
+  :ensure t
+  :config (load-theme 'zenburn t))
+#+END_SRC
+
+* Edición de Texto
+** Indentación con espacios
+
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil) 
+#+END_SRC
+
+** Visual line mode
+
+   Para los archivos de texto activo el modo *visual-line-mode* que hace que el texto se acomode a la pantalla sin cortar las palabras cuando la línea excede el ancho de la pantalla, enviando la última palabra al siguiente renglón.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+#+END_SRC
+
+** Unfill paragraph
+
+   En esta sección se definen dos funciones que permiten transformar un párrafo (o una región) con saltos de línea (p.ej. en la columna 80) en un párrafo de una única línea de texto. Realizan la acción inversa de *fill-paragraph* y *fill-region*, y por lo tanto llevan los nombres de *unfill-paragraph* y *unfill-region*.
+
+#+BEGIN_SRC emacs-lisp
+
+;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph    
+(defun unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn (barf-if-buffer-read-only) '(t)))
+  (let ((fill-column (point-max))
+        ;; This would override `fill-column' if it's an integer.
+        (emacs-lisp-docstring-fill-column t))
+    (fill-paragraph nil region)))
+;; Handy key definition
+(define-key global-map "\M-Q" 'unfill-paragraph)
+
+(defun unfill-region (beg end)
+  "Unfill the region, joining text paragraphs into a single
+    logical line.  This is useful, e.g., for use with
+    `visual-line-mode'."
+  (interactive "*r")
+  (let ((fill-column (point-max)))
+    (fill-region beg end)))
+
+;; Handy key definition
+(define-key global-map "\C-\M-Q" 'unfill-region)
+
+#+END_SRC
+
+** Mostrar los números de línea y de columna
+
+#+BEGIN_SRC emacs-lisp
+(line-number-mode t)
+(column-number-mode t)
+(size-indication-mode t)
+#+END_SRC
+
+** Web Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+  :ensure t
+  :mode (("\\.phtml\\'" . web-mode)
+         ("\\.tpl\\.php\\'" . web-mode)
+         ("\\.twig\\.html\\'" . web-mode)
+         ("\\.html?\\'" . web-mode)))
+#+END_SRC
+
+** PHP Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package php-mode
+  :ensure t
+  :mode (("\\.php\\'" . php-mode)))
+#+END_SRC
+
+** Sintaxis en colores en Org-mode
+
+   Esta opción permite que los bloques de código en org-mode tengan syntax highlighting.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-src-fontify-natively t)
+#+END_SRC
+
+* Movimiento del Cursor
+** Scroll: Preservar la posición del cursor
+
+#+BEGIN_SRC emacs-lisp
+(setq scroll-preserve-screen-position 1)
+#+END_SRC
+
+** Scroll: Mover la ventana de a una línea
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-n") (kbd "C-u 1 C-v"))
+(global-set-key (kbd "M-p") (kbd "C-u 1 M-v"))
+#+END_SRC
+
+** Scroll: Tres líneas de margen
+
+#+BEGIN_SRC emacs-lisp
+(setq scroll-margin 3)
+#+END_SRC
+
+** Scroll: Corregir comportamiento en M-x shell
+
+#+BEGIN_SRC emacs-lisp
+;; Don't scroll to bottom for shell output
+(setq comint-scroll-show-maximum-output nil)
+#+END_SRC
+   
+** Goto: Beginning of the line
+
+#+BEGIN_SRC emacs-lisp
+
+(defun smarter-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+;; remap C-a to `smarter-move-beginning-of-line'
+(global-set-key [remap move-beginning-of-line]
+                'smarter-move-beginning-of-line)
+
+#+END_SRC
+
+* Teclado
+** Confirmar con y-n (en vez de yes-no)
+
+#+BEGIN_SRC emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+** Shortcut: Kill this buffer
+
+   Esta opción hace que el shortcut (ctrl-x k), que generalmente está asociado a *kill-buffer*, sea reemplazado por *kill-this-buffer*, que cierra el buffer actual sin necesidad de pedir una confirmación.
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+#+END_SRC
+
+** Shortcut: Switch window
+
+   Esta opcion agrega el shortcut (ctrl-o) para cambiar a la otra ventana, función que por defecto tiene un shortcut más complejo (ctrl-x o).
+
+#+BEGIN_SRC emacs-lisp
+(define-key global-map (kbd "C-o") 'other-window)
+#+END_SRC
+
+* Paquetes Varios
+
+#+BEGIN_SRC emacs-lisp
+(use-package ido :ensure t :config (ido-mode t))
+(use-package smex :ensure t :config (define-key global-map (kbd "M-x") 'smex))
+(use-package windresize :ensure t)
+(use-package mwe-log-commands :ensure t)
+(use-package multi-web-mode :ensure t)
+(use-package yaml-mode :ensure t)
+(use-package markdown-mode :ensure t)
+(use-package magit :ensure t)
+(use-package json-mode :ensure t)
+#+END_SRC
+
