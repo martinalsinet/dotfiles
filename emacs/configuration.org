@@ -298,15 +298,17 @@ point reaches the beginning or end of the buffer, stop there."
 
 * Paquetes Varios
 
+  En esta sección se cargan los paquetes que uso frecuentemente y que no tienen ninguna configuración particular. En primer lugar tenemos ido, que es un autocomplete para seleccionar buffers y nombres de archivos. Luego está smex, que también es un autocomplete pero para explorar las funciones disponibles del editor (alt-x). También está magit, que es una interfaz para interactuar con repositorios Git desde dentro de emacs. Luego unos modos para manejar diferentes formatos de texto (yaml, markdown y json). Y finalmente dos herramientas menores, windresize para cambiar el tamaño de las ventanas cuando se muestran múltiples archivos lado a lado, y mwe-log-commands otra para registrar los comandos que se ejecutan dentro de emacs.
+
 #+BEGIN_SRC emacs-lisp
 (use-package ido :ensure t :config (ido-mode t))
 (use-package smex :ensure t :config (define-key global-map (kbd "M-x") 'smex))
-(use-package windresize :ensure t)
-(use-package mwe-log-commands :ensure t)
-(use-package multi-web-mode :ensure t)
+(use-package magit :ensure t)
+;(use-package multi-web-mode :ensure t)
 (use-package yaml-mode :ensure t)
 (use-package markdown-mode :ensure t)
-(use-package magit :ensure t)
 (use-package json-mode :ensure t)
+(use-package windresize :ensure t)
+(use-package mwe-log-commands :ensure t)
 #+END_SRC
 
