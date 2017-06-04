@@ -3,11 +3,11 @@
 
 * Motivación
   
-  Una vez que uno decide utilizar *emacs* como editor de texto, una de las cosas que debe hacer es personalizar el editor según nuestras preferencias. Para ello es necesario editar el archivo *~/.emacs* y entonces comienzan los problemas. Van a encontrar miles y miles de ejemplos de este archivo de configuración, con miles de configuraciones y comandos diferentes y se hace extremadamente tedioso entender y aprender cuáles son las que nos van a servir o que nos convendría utilizar.
+  Una vez que uno decide utilizar *emacs* como editor de texto, una de las cosas que debe hacer es personalizar el editor según sus preferencias. Para ello es necesario editar el archivo *~/.emacs* y entonces comienzan los problemas. Se van a encontrar con miles y miles de ejemplos de este archivo de configuración, con miles de configuraciones y comandos diferentes y se hace extremadamente tedioso entender y aprender cuáles son las que nos van a servir o las que nos convendría utilizar.
   
   Un problema muy común con el archivo .emacs es que rápidamente se va saliendo de control y al cabo de un tiempo ya no se sabe qué hace cada parte y empieza a aparecer una especie de miedo supersticioso a modificar las preferencias, que se traduce en una tendencia a mantener bloques que ya uno se olvidó qué hacen pero que siguen conservando "para no romper lo que me está funcionando".
   
-  Cada vez que intenté utilizar emacs como mi editor principal tuve este problema, y era una fuente importante de mi frustración con el uso del editor. Por suerte hubo gente que lo solucionó de una manera muy elegante y que permite realizar lo que Donald Knuth denominó "Literate Programming", es decir, un programa que en realidad es documentación ejecutable, que se lee como un documento para que los seres humanos lo puedan entender y que al mismo tiempo es código fuente para que la máquina (emacs) lo pueda ejecutar.
+  Cada vez que intenté utilizar emacs como mi editor principal tuve este problema, y era un motivo importante de mi frustración con el uso del editor. Por suerte hubo gente que lo solucionó de una manera muy elegante y que permite realizar lo que Donald Knuth denominó "Literate Programming", es decir, un programa que en realidad es documentación ejecutable, que se lee como un documento para que los seres humanos lo puedan entender y que al mismo tiempo es código fuente para que la máquina (emacs) lo pueda ejecutar.
   
   Básicamente la solución consiste en utilizar *org-mode*, que es un modo mayor de emacs para escribir documentos y listas de tareas, y que permite incorporar bloques de código dentro de un documento. La ventaja principal que tiene este modo es que se puede visualizar el documento de manera jerárquica, con nodos y subnodos que se pueden ir abriendo y ocultando según se requiera.
   
@@ -25,11 +25,11 @@
 - Paquetes Varios
   #+END_QUOTE
   
-  Cada uno de los títulos del documento es una sección que se puede abrir con la tecla TAB (y cerrarla con Shift-TAB) para examinarla en detalle, con sub-ítems que contienen los diferentes bloques de código que configuran las diversas funcionalidades del editor de acuerdo a mis preferencias.
+  Cada uno de los títulos del documento es una sección que se puede abrir con la tecla TAB (y cerrarla con Shift-TAB) para examinarla en detalle, donde se van agregando ítems y sub-ítems que contienen los diferentes bloques de código para configurar las diversas funcionalidades del editor de acuerdo a mis preferencias.
   
   En el archivo *~/.emacs* ahora lo único que me queda es una llamada a la función *org-babel-load-file* que lo que hace es cargar el archivo *configuration.org* y ejecutarlo cada vez que se inicia el editor.
   
-  De esta manera, me queda un documento que me explica en detalle qué hace cada una de las opciones y que está ordenado, que es fácil de navegar y sobre todo de modificar. Ahora puedo entender qué hace cada opción, porque cada sección y cada ítem me indica qué es lo que hace el bloque de código correspondiente. Y si existe una opción que no tiene sentido o que he dejado de utilizar, puedo cambiarla o incluso borrarla sin miedo a afectar el comportamiento general del editor.
+  De esta manera, me queda un documento que me explica en detalle qué hace cada una de las opciones y que está ordenado, que es fácil de navegar y sobre todo de modificar. Ahora puedo entender qué hace cada opción, porque cada sección y cada ítem me indica en detalle qué es lo que hace el bloque de código correspondiente. Y si existe una opción que no tiene sentido o que he dejado de utilizar, puedo cambiarla o incluso borrarla sin miedo a afectar el comportamiento general del editor.
   
 ** Algunos links que utilicé como inspiración
 
