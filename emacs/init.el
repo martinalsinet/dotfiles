@@ -11,3 +11,18 @@
 (org-babel-load-file
  (expand-file-name "configuration.org"
                    user-emacs-directory))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (flx-ido projectile geiser zenburn-theme yaml-mode windresize wiki-summary web-mode-edit-element w3m use-package smex php-mode ox-latex-chinese mwe-log-commands multi-web-mode markdown-mode magit json-mode auctex)))
+ '(safe-local-variable-values (quote ((geiser-scheme-implementation quote mit)))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

@@ -297,18 +297,56 @@ point reaches the beginning or end of the buffer, stop there."
 #+END_SRC
 
 * Paquetes Varios
+** Autocomplete
 
-  En esta sección se cargan los paquetes que uso frecuentemente y que no tienen ninguna configuración particular. En primer lugar tenemos ido, que es un autocomplete para seleccionar buffers y nombres de archivos. Luego está smex, que también es un autocomplete pero para explorar las funciones disponibles del editor (alt-x). También está magit, que es una interfaz para interactuar con repositorios Git desde dentro de emacs. Luego unos modos para manejar diferentes formatos de texto (yaml, markdown y json). Y finalmente dos herramientas menores, windresize para cambiar el tamaño de las ventanas cuando se muestran múltiples archivos lado a lado, y mwe-log-commands otra para registrar los comandos que se ejecutan dentro de emacs.
+   El paquete *ido* permite abrir archivos y elegir buffers tipeando solamente parte del nombre. El paquete *flx-ido* es una mejora en el matching para ido y el paquete *smex* implementa un autocomplete similar a ido para la búsqueda de funcionalidades dentro del editor (Meta-x).
 
 #+BEGIN_SRC emacs-lisp
-(use-package ido :ensure t :config (ido-mode t))
-(use-package smex :ensure t :config (define-key global-map (kbd "M-x") 'smex))
+(use-package ido 
+  :ensure t 
+  :config (progn (ido-mode t) (ido-everywhere t)))
+(use-package flx-ido 
+  :ensure t 
+  :config (flx-ido-mode t))
+(use-package smex 
+  :ensure t 
+  :config (define-key global-map (kbd "M-x") 'smex))
+#+END_SRC
+
+** Project management
+
+   El paquete *magit* es una interface para git dentro de emacs y el paquete *projectile* permite crear proyectos y administrar sus archivos (buscar dentro del proyecto, etc.) 
+
+#+BEGIN_SRC emacs-lisp
 (use-package magit :ensure t)
-;(use-package multi-web-mode :ensure t)
+(use-package projectile :ensure t)
+#+END_SRC
+
+** Scheme Programming
+
+#+BEGIN_SRC 
+(use-package geiser 
+  :ensure t
+  :config (progn (org-babel-do-load-languages
+                   'org-babel-load-languages
+                     '((scheme . t)
+                       (emacs-lisp . t)))
+                 (setq geiser-scheme-implementation 'mit)))
+#+END_SRC
+
+** Text modes (yaml, json, markdown)
+
+#+BEGIN_SRC emacs-lisp
 (use-package yaml-mode :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package json-mode :ensure t)
+#+END_SRC
+
+** Editor tools
+
+   El paquete *windresize* permite cambiar el tamaño de las ventanas utilizando las flechas del teclado y el paquete *mwe-log-commands* permite tener un buffer donde se van logueando todos los comandos que se ejecutan en el editor.
+
+#+BEGIN_SRC emacs-lisp
 (use-package windresize :ensure t)
 (use-package mwe-log-commands :ensure t)
 #+END_SRC
-
