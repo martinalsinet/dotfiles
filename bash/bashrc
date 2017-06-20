@@ -1,0 +1,21 @@
+# ls
+alias l='ls -lt'
+alias ll='ls -alhG'
+
+# docker
+alias dps='docker ps'
+alias dpsa='docker ps -a'
+alias dim='docker images'
+docker-du(){
+    docker images | grep MB | awk '{print $7}' | awk '{s+=$1} END {print s" MB"}'
+}
+
+# git
+alias gl='git log --pretty=oneline'
+alias gst='git status'
+alias git-history='git log --format="%ai %s" --reverse | sed "s/....-0500 /  /"'
+
+# environment
+export PATH=$PATH:~/bin
+
+
