@@ -1,7 +1,0 @@
-#!/bin/sh
-export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
-echo "Current working directory: '"$(pwd)"'"
-docker run --rm -v $(pwd):/app -v /Users/martin:/Users/martin -v ~/.ssh:/root/.ssh -w /app malsinet/latex pdflatex $@
-#rm *.log *.aux 
-#ls *.ent && rm *.ent
-
