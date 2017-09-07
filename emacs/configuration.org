@@ -2,6 +2,8 @@
 #+TITLE: Configuración de Emacs
 #+AUTHOR: Martín Alsinet
 #+DATE: 2017
+#+OPTIONS: toc:nil ':t num:nil
+#+LANGUAGE: en
 
 * Motivación
   
@@ -196,7 +198,10 @@
   :mode (("\\.phtml\\'" . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
          ("\\.twig\\.html\\'" . web-mode)
-         ("\\.html?\\'" . web-mode)))
+         ("\\.html?\\'" . web-mode))
+  :config (progn 
+            (setq web-mode-markup-indent-offset 2)
+            (setq web-mode-css-indent-offset 2)))
 #+END_SRC
 
 ** PHP Mode
@@ -207,7 +212,7 @@
   :mode (("\\.php\\'" . php-mode)))
 #+END_SRC
 
-** Sintaxis en colores en Org-mode
+** Org-mode: Sintaxis en colores
 
    Esta opción permite que los bloques de código en org-mode tengan syntax highlighting.
 
@@ -325,17 +330,28 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package projectile :ensure t)
 #+END_SRC
 
+** Org-Babel: Supported Programming Languages
+
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'org
+  (org-babel-do-load-languages
+    'org-babel-load-languages
+          '((scheme . t)
+            (python . t)
+            (sh . t)
+            (js . t)
+            (emacs-lisp . t))))
+
+;; don't ask for confirmation to run code block
+(setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
 ** Scheme Programming
 
 #+BEGIN_SRC emacs-lisp
 (use-package geiser 
   :ensure t
-  :config (progn (org-babel-do-load-languages
-                   'org-babel-load-languages
-                     '((scheme . t)
-                       (sh . t)
-                       (emacs-lisp . t)))
-                 (setq geiser-scheme-implementation 'mit)))
+  :config (setq geiser-scheme-implementation 'mit))
 #+END_SRC
 
 ** Text modes (yaml, json, markdown, dockerfiles)
@@ -349,9 +365,11 @@ point reaches the beginning or end of the buffer, stop there."
 
 ** Editor tools
 
-   El paquete *windresize* permite cambiar el tamaño de las ventanas utilizando las flechas del teclado y el paquete *mwe-log-commands* permite tener un buffer donde se van logueando todos los comandos que se ejecutan en el editor.
+   El paquete *windresize* permite cambiar el tamaño de las ventanas utilizando las flechas del teclado. El paquete *mwe-log-commands* permite tener un buffer donde se van logueando todos los comandos que se ejecutan en el editor. El paquete *buffer-move* agrega la funcionalidad para intercambiar las ventanas del editor (izq<>der, arriba<>abajo).
 
 #+BEGIN_SRC emacs-lisp
 (use-package windresize :ensure t)
 (use-package mwe-log-commands :ensure t)
+(use-package buffer-move :ensure t)
 #+END_SRC
+

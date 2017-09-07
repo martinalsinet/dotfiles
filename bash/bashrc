@@ -13,7 +13,7 @@ docker-du(){
 # git
 alias gl='git log --pretty=oneline'
 alias gst='git status'
-alias git-history='git log --format="%ai %s" --reverse | sed "s/....-0500 /  /"'
+alias git-history='git log --format="%ai %s" --reverse | sed "s/....-0[35]00 /  /"'
 
 # environment
 export PATH=$PATH:~/bin
