@@ -137,6 +137,39 @@
   :config (load-theme 'zenburn t))
 #+END_SRC
 
+** Ocultar Mode-line
+
+Cuando uso org-mode para hacer presentaciones prefiero ocultar la línea de estatus (mode-line).
+
+#+BEGIN_SRC emacs-lisp
+(defvar-local hidden-mode-line-mode nil)
+
+(define-minor-mode hidden-mode-line-mode
+  "Minor mode to hide the mode-line in the current buffer."
+  :init-value nil
+  :global t
+  :variable hidden-mode-line-mode
+  :group 'editing-basics
+  (if hidden-mode-line-mode
+      (setq hide-mode-line mode-line-format
+            mode-line-format nil)
+    (setq mode-line-format hide-mode-line
+          hide-mode-line nil))
+  (force-mode-line-update)
+  ;; Apparently force-mode-line-update is not always enough to
+  ;; redisplay the mode-line
+  (redraw-display)
+  (when (and (called-interactively-p 'interactive)
+             hidden-mode-line-mode)
+    (run-with-idle-timer
+     0 nil 'message
+     (concat "Hidden Mode Line Mode enabled.  "
+             "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
+
+;; If you want to hide the mode-line in every buffer by default
+;; (add-hook 'after-change-major-mode-hook 'hidden-mode-line-mode)
+#+END_SRC
+
 * Edición de Texto
 ** Indentación con espacios
 
@@ -212,12 +245,15 @@
   :mode (("\\.php\\'" . php-mode)))
 #+END_SRC
 
-** Org-mode: Sintaxis en colores
-
-   Esta opción permite que los bloques de código en org-mode tengan syntax highlighting.
+** Python Mode
 
 #+BEGIN_SRC emacs-lisp
-(setq org-src-fontify-natively t)
+(add-hook 'python-mode-hook
+      (lambda ()
+        (setq indent-tabs-mode nil)
+        (setq tab-width 4)
+        (setq python-indent 4)
+        (setq python-indent-offset 4)))
 #+END_SRC
 
 * Movimiento del Cursor
@@ -303,6 +339,92 @@ point reaches the beginning or end of the buffer, stop there."
 (define-key global-map (kbd "C-o") 'other-window)
 #+END_SRC
 
+* Org-Mode
+** Código fuente
+*** Sintaxis en colores en el buffer
+
+   Esta opción permite que los bloques de código en org-mode tengan syntax highlighting.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-src-fontify-natively t)
+#+END_SRC
+
+*** Sintaxis en colores al exportar a PDF
+
+Utilizo el paquete =minted= para formatear los bloques de código fuente en el archivo pdf exportado. Esto requiere modificar el comando que usa org-mode para generar el pdf, agregando las opciones =-shell-escape= y =-interaction nonstopmode=.
+
+Además configuro algunas opciones para formatear los bloques de código fuente de acuerdo a mis preferencias:
+
+- tamaño de fuente pequeño (para que entren las líneas largas)
+- margen izquierdo
+- color de fondo
+- mostrar números de línea
+
+#+BEGIN_SRC emacs-lisp
+(require 'ox-latex)
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+(setq org-latex-listings 'minted)
+
+(setq org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+(setq org-latex-minted-options 
+      '(("fontsize" "\\scriptsize")
+        ("xleftmargin" "\\parindent")
+        ("bgcolor" "bg")
+        ("linenos" "")))
+#+END_SRC
+
+**** Nota: Configurar el color de fondo y el estilo
+
+Para configurar el color de fondo de los bloques de código fuente es necesario agregar al preámbulo del archivo org unas opciones para cargar el paquete =xcolor= y para definir el color de fondo (=bg=). 
+
+Además se puede seleccionar el estilo del highlighting con el comando =\usemintedstyle{}=.
+
+#+BEGIN_SRC 
+#+LaTeX_HEADER: \usemintedstyle{default}
+#+LaTeX_HEADER: \usepackage{xcolor}
+#+LaTeX_HEADER: \definecolor{bg}{rgb}{0.95,0.95,0.95}
+#+END_SRC
+
+Los estilos disponibles se pueden consultar con =pygmentize -L styles=
+
+#+BEGIN_SRC
+pygmentize -L styles
+#+END_SRC
+
+*** Indentación en bloques de código
+
+Este comando elimina toda intentación en el bloque de código luego de editarlo con =C-c C-'=. Por defecto le agrega 2 espacios en el margen izquierdo, lo que modifica la indentación correcta del lenguaje correspondiente.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-edit-src-content-indentation 0)
+#+END_SRC
+
+** Org-Babel: Lenguajes de programación
+
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'org
+  (org-babel-do-load-languages
+    'org-babel-load-languages
+          '((scheme . t)
+            (python . t)
+            (sh . t)
+            (js . t)
+            (emacs-lisp . t))))
+
+;; don't ask for confirmation to run code block
+(setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
+** Org-Present: Presentaciones
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-present :ensure t)
+#+END_SRC
+
 * Paquetes Varios
 ** Autocomplete
 
@@ -328,22 +450,6 @@ point reaches the beginning or end of the buffer, stop there."
 #+BEGIN_SRC emacs-lisp
 (use-package magit :ensure t)
 (use-package projectile :ensure t)
-#+END_SRC
-
-** Org-Babel: Supported Programming Languages
-
-#+BEGIN_SRC emacs-lisp
-(with-eval-after-load 'org
-  (org-babel-do-load-languages
-    'org-babel-load-languages
-          '((scheme . t)
-            (python . t)
-            (sh . t)
-            (js . t)
-            (emacs-lisp . t))))
-
-;; don't ask for confirmation to run code block
-(setq org-confirm-babel-evaluate nil)
 #+END_SRC
 
 ** Scheme Programming
@@ -372,4 +478,5 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package mwe-log-commands :ensure t)
 (use-package buffer-move :ensure t)
 #+END_SRC
+
 
