@@ -1,0 +1,54 @@
+
+#+TITLE: Dotfiles
+#+AUTHOR: Martín Alsinet
+#+DATE: 2017
+#+OPTIONS: toc:nil ':t num:nil
+#+LANGUAGE: en
+
+* bashrc
+
+Básicamente mi *.bashrc* configura los alias de los comandos que utilizo diariamente en la consola y agrega la carpeta =~/bin= al =$PATH=.
+
+#+BEGIN_SRC sh :tangle build/bashrc
+# ls
+alias l='ls -lt'
+alias ll='ls -alhG'
+
+# docker
+alias dps='docker ps'
+alias dpsa='docker ps -a'
+alias dim='docker images'
+docker-du(){
+    docker images | grep MB | awk '{print $7}' | awk '{s+=$1} END {print s" MB"}'
+}
+
+# git
+alias gl='git log --pretty=oneline'
+alias gst='git status'
+alias git-history='git log --format="%ai %s" --reverse | sed "s/....-0[35]00 /  /"'
+alias gith='git history'
+
+# path
+export PATH=$PATH:~/bin
+#+END_SRC
+
+* emacs
+
+Mis configuración de *emacs* la llevo en dos archivos, [[file:emacs-init.el][emacs-init.el]] y [[file:emacs-config.el][emacs-config.el]].
+
+* setup
+
+Ejecutar =org-babel-tangle= y luego ejectuar el bloque de código a continuación con =C-c C-c=
+
+#+BEGIN_SRC sh
+cd ~
+rm .bashrc .emacs .emacs.d/config.org
+ln -sF Documents/repos/dotfiles
+ln -s dotfiles/build/bashrc .bashrc
+ln -s dotfiles/emacs-init.el .emacs
+cd .emacs.d
+ln -s ../dotfiles/emacs-config.org config.org
+#+END_SRC
+
+#+RESULTS:
+

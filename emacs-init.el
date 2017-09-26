@@ -9,7 +9,7 @@
 
 (require 'org)
 (org-babel-load-file
- (expand-file-name "configuration.org"
+ (expand-file-name "config.org"
                    user-emacs-directory))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
