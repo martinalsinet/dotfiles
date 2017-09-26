@@ -7,7 +7,7 @@
 
 * bashrc
 
-Básicamente mi *.bashrc* configura los alias de los comandos que utilizo diariamente en la consola y agrega la carpeta =~/bin= al =$PATH=.
+Básicamente mi *.bashrc* configura los alias de los comandos que más utilizo en la consola y agrega la carpeta =~/bin= al =$PATH=.
 
 #+BEGIN_SRC sh :tangle build/bashrc
 # ls
@@ -34,7 +34,7 @@ export PATH=$PATH:~/bin
 
 * emacs
 
-Mis configuración de *emacs* la llevo en dos archivos, [[file:emacs-init.el][emacs-init.el]] y [[file:emacs-config.el][emacs-config.el]].
+Mis configuración de *emacs* la llevo aparte en los archivos [[file:emacs-init.el][emacs-init.el]] y [[file:emacs-config.org][emacs-config.org]]
 
 * setup
 
