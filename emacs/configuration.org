@@ -75,8 +75,9 @@
 #+END_SRC
 
 * Backups e Historial
+*** TODO Analizar si lo borro
 
-  Tengo que analizar la posibilidad de eliminar los backups y el historial. No los uso.
+Tengo que analizar la posibilidad de eliminar los backups y el historial. No los uso.
 
 ** Backups
 
@@ -212,6 +213,8 @@ Cuando uso org-mode para hacer presentaciones prefiero ocultar la línea de esta
 
 ;; If you want to hide the mode-line in every buffer by default
 ;; (add-hook 'after-change-major-mode-hook 'hidden-mode-line-mode)
+
+
 #+END_SRC
 
 * Edición de Texto
@@ -427,7 +430,7 @@ The keybindings for evaluating expressions in the browser are just like the Lisp
   :init (skewer-setup))
 #+END_SRC
 
-** Clojure
+** TODO Clojure
 *** CIDER
 
 https://github.com/clojure-emacs/cider
@@ -714,8 +717,37 @@ Este comando elimina toda intentación en el bloque de código luego de editarlo
 
 ** Org-Present: Presentaciones
 
+Ultra-minimalist presentation minor-mode for Emacs org-mode - [[https://github.com/rlister/org-present][Github]]
+
 #+BEGIN_SRC emacs-lisp
 (use-package org-present :ensure t)
+#+END_SRC
+
+*** TODO Configuración
+
+Tengo que encontrar la manera de ocultar la mode-line cuando se inicia el modo org-present y mostrarla cuando se sale de la presentación.
+
+Traté de usar los hooks pero me oculta la línea y después no la puedo volver a mostrar.
+
+#+BEGIN_QUOTE
+Precise behaviour of org-present during start and quit is controlled from hooks. The following will enlarge text, show images, hide the cursor and make the buffer read-only:
+#+END_QUOTE
+
+#+BEGIN_SRC 
+(eval-after-load "org-present"
+  '(progn
+     (add-hook 'org-present-mode-hook
+               (lambda ()
+                 (org-present-big)
+                 (org-display-inline-images)
+                 (org-present-hide-cursor)
+                 (org-present-read-only)))
+     (add-hook 'org-present-mode-quit-hook
+               (lambda ()
+                 (org-present-small)
+                 (org-remove-inline-images)
+                 (org-present-show-cursor)
+                 (org-present-read-write)))))
 #+END_SRC
 
 * Paquetes Varios
