@@ -19,7 +19,7 @@
  '(package-selected-packages
    (quote
     (expand-region skewer-mode impatient-mode simple-httpd emmet-mode js2-mode htmlize org-present bash-completion buffer-move dockerfile-mode flx-ido projectile geiser zenburn-theme yaml-mode windresize wiki-summary web-mode-edit-element w3m use-package smex php-mode ox-latex-chinese mwe-log-commands multi-web-mode markdown-mode magit json-mode auctex)))
- '(safe-local-variable-values (quote ((geiser-scheme-implementation quote mit)))))
+ '(safe-local-variable-values (quote ((geiser-scheme-implementation quote mit) n))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

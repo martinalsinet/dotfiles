@@ -109,17 +109,18 @@
 #+END_SRC
   
 * Apariencia
-  
-  En esta sección puse las preferencias que tienen que ver con el aspecto visual del editor. Uso emacs desde una terminal y me manejo para todo con el teclado, por lo tanto no necesito ocupar espacio de la pantalla con barras de menú o herramientas, y además desactivo todos los sonidos porque me parecen muy molestos.
 
-  Como conjunto de colores utilizo el *zenburn-theme*, que es conjunto de colores obscuro (letras en blanco y en color sobre un fondo negro) que cansa menos la vista que el conjunto por defecto (letras en negro y en color sobre un fondo blanco).
+  En esta sección puse las preferencias que tienen que ver con el aspecto visual del editor. Uso emacs desde una terminal y me manejo para todo con el teclado, por lo tanto no necesito ocupar espacio de la pantalla con barras de menú o herramientas, y además desactivo todos los sonidos porque me parecen muy molestos.
   
 ** Desactivar ventanas y menús
 
 #+BEGIN_SRC emacs-lisp
 (menu-bar-mode -1)
 (tool-bar-mode -1)
-; (scroll-bar-mode -1)
+
+;; When not running in terminal disable scroll bars
+(when (display-graphic-p)
+  (scroll-bar-mode -1))
 #+END_SRC
 
 ** Desactivar sonidos
@@ -129,12 +130,55 @@
 (setq ring-bell-function 'ignore)
 #+END_SRC
 
-** Cargar zenburn-theme
+** Themes
+
+  Como conjunto de colores utilizo el *zenburn-theme*, que es conjunto de colores obscuro (letras en blanco y en color sobre un fondo negro) que cansa menos la vista que el conjunto por defecto (letras en negro y en color sobre un fondo blanco).
+
+*** Themes disponibles
+
+- [[https://emacsthemes.com/themes/zenburn-theme.html][zenburn]] (default, dark)
+- [[https://emacsthemes.com/themes/github-theme.html][github]] (light)
+- [[https://emacsthemes.com/themes/leuven-theme.html][leuven]] (light)
 
 #+BEGIN_SRC emacs-lisp
-(use-package zenburn-theme
-  :ensure t
-  :config (load-theme 'zenburn t))
+(use-package zenburn-theme :ensure t)
+(use-package github-theme :ensure t)
+(use-package leuven-theme :ensure t)
+#+END_SRC
+
+*** Switch theme
+
+Agrego una función para cambiar de theme desactivando todo lo que haya sido modificado por un theme anterior. Esto se debe a que a veces los themes no configuran exactamente el mismo conjunto de preferencias y eso causa que, al cambiar de theme sin resetear las preferencias, queden partes configuradas de un theme anterior.
+
+[[https://emacs.stackexchange.com/questions/3112/how-to-reset-color-theme][How to reset color theme?]]
+
+#+BEGIN_QUOTE
+Are you sure that you are using *color themes* and not Emacs *custom themes*? Color themes are defined by library color-theme.el. Custom themes are available starting with Emacs 24 - and they are not the same as color themes.
+
+- If you are using color themes then the answer is simple: just enable the pseudo color-theme named [Reset]. That completely undoes the theme: removes all effects that it imposed.
+
+- If you are in fact using Emacs custom themes then the answer is not so simple. You cannot undo the application of a custom theme. What you can do, which will help a lot, is to disable each custom theme, using disable-theme, after it has been enabled and before enabling another custom theme.
+#+END_QUOTE
+
+Switch Theme ([[https://www.reddit.com/r/emacs/comments/30b67j/how_can_you_reset_emacs_to_the_default_theme/][source]])
+
+#+BEGIN_SRC emacs-lisp
+(defun switch-theme (theme)
+  ;; This interactive call is taken from `load-theme'
+  (interactive
+   (list
+    (intern (completing-read "Load custom theme: "
+                             (mapcar 'symbol-name
+                                     (custom-available-themes))))))
+  (mapcar #'disable-theme custom-enabled-themes)
+  (load-theme theme t))
+#+END_SRC
+
+*** Activar el default theme
+
+#+BEGIN_SRC emacs-lisp
+(switch-theme 'leuven)
+(switch-theme 'zenburn)
 #+END_SRC
 
 ** Ocultar Mode-line
