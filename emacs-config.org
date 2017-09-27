@@ -216,7 +216,10 @@ Cuando uso org-mode para hacer presentaciones prefiero ocultar la línea de esta
 
 
 #+END_SRC
-
+** Split Window
+#+BEGIN_SRC emacs-lisp
+(split-window-horizontally)
+#+END_SRC
 * Edición de Texto
 ** Indentación con espacios
 
@@ -374,7 +377,9 @@ Improved Javascript Mode - [[https://github.com/mooz/js2-mode][Github]]
 Selección inteligente de bloques de acuerdo al formato del código - [[https://github.com/magnars/expand-region.el][Github]] - [[http://emacsrocks.com/e09.html][YouTube]]
 
 #+BEGIN_SRC emacs-lisp
-(use-package expand-region :ensure t)
+(use-package expand-region 
+  :ensure t
+  :bind (("C-=" . er/expand-region)))
 #+END_SRC
 
 ** Live Coding
@@ -566,6 +571,14 @@ point reaches the beginning or end of the buffer, stop there."
 #+END_SRC
 
 * Org-Mode
+** Org-indent-mode
+
+Este modo mejora la legibilidad para documentos con muchos ítems, indentando los bloques a medida que se va entrando en la jerarquía del documento.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-startup-indented nil)
+#+END_SRC
+
 ** Código fuente: Sintaxis en colores
 *** En el buffer
 
@@ -632,6 +645,7 @@ Defino una función para insertar los headers que me permiten configurar el colo
    (insert my/org-pdf-src-style-color))
 #+END_SRC
 
+*** Al exportar a HTML
 **** Themes
 ***** Readtheorg
 #+NAME: readtheorg
@@ -684,6 +698,8 @@ Defino una función para insertar los headers que me permiten configurar el colo
             (insert "\n"))
          ((message "Available themes: readtheorg, bigblow"))))
 #+END_SRC
+
+***** TODO Modificar la carga de themes para que use la directiva =+#SETUPFILE=
 
 ** Código fuente: Indentación
 
