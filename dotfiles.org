@@ -42,12 +42,11 @@ Ejecutar =org-babel-tangle= y luego ejectuar el bloque de código a continuació
 
 #+BEGIN_SRC sh
 cd ~
-rm .bashrc .emacs .emacs.d/config.org
 ln -sF Documents/repos/dotfiles
-ln -s dotfiles/build/bashrc .bashrc
-ln -s dotfiles/emacs-init.el .emacs
+ln -sf dotfiles/build/bashrc .bashrc
+ln -sf dotfiles/emacs-init.el .emacs
 cd .emacs.d
-ln -s ../dotfiles/emacs-config.org config.org
+ln -sf ../dotfiles/emacs-config.org config.org
 #+END_SRC
 
 #+RESULTS:

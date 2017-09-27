@@ -784,12 +784,22 @@ Precise behaviour of org-present during start and quit is controlled from hooks.
   :config (smex-initialize))
 #+END_SRC
 
-** Project management
-
-   El paquete *magit* es una interface para git dentro de emacs y el paquete *projectile* permite crear proyectos y administrar sus archivos (buscar dentro del proyecto, etc.) 
+** Projectile
 
 #+BEGIN_SRC emacs-lisp
-(use-package magit :ensure t)
+(use-package projectile :ensure t)
+#+END_SRC
+
+** Magit
+
+Modifico la tecla "q" para que destruya el buffer cuando lo cierro.
+
+#+BEGIN_SRC emacs-lisp
+(use-package magit 
+  :ensure t
+  :config (define-key magit-mode-map 
+             (kbd "q") 
+             (lambda() (interactive) (magit-mode-bury-buffer t))))
 (use-package projectile :ensure t)
 #+END_SRC
 
