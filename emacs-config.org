@@ -17,7 +17,7 @@
   
   Si abrieran con emacs este archivo, que tiene todas mis preferencias de configuración, van a ver un listado similar al siguiente:
  
-#+BEGIN_ASCII
+#+BEGIN_SRC text
 - Motivación
 - Información Personal
 - Repositorios de Paquetes
@@ -27,7 +27,7 @@
 - Movimiento del Cursor
 - Teclado
 - Paquetes Varios
-#+END_ASCII
+#+END_SRC
   
   Cada uno de los títulos del documento es una sección que se puede abrir con la tecla TAB (y cerrarla con Shift-TAB) para examinarla en detalle, donde se van agregando ítems y sub-ítems que contienen los diferentes bloques de código para configurar las diversas funcionalidades del editor de acuerdo a mis preferencias.
   
@@ -119,9 +119,19 @@ Tengo que analizar la posibilidad de eliminar los backups y el historial. No los
         regexp-search-ring))
 #+END_SRC
   
+* Environment
+
+#+BEGIN_SRC emacs-lisp
+(when (display-graphic-p)
+  (setenv "PATH"
+          (concat (getenv "PATH")
+                  ":/usr/local/bin"
+                  ":~/bin")))
+#+END_SRC
+
 * Apariencia
 
-  En esta sección puse las preferencias que tienen que ver con el aspecto visual del editor. Uso emacs desde una terminal y me manejo para todo con el teclado, por lo tanto no necesito ocupar espacio de la pantalla con barras de menú o herramientas, y además desactivo todos los sonidos porque me parecen muy molestos.
+  En esta sección puse las preferencias que tienen que ver con el aspecto visual del editor. Ya sea que use Emacs desde una consola o desde la interface gráfica nativa, me manejo para todo con el teclado, entonces no necesito ocupar espacio de la pantalla con barras de menú o herramientas, y además desactivo todos los sonidos y el parpadeo del cursor porque me parecen muy molestos.
   
 ** Desactivar ventanas y menús
 
@@ -139,6 +149,21 @@ Tengo que analizar la posibilidad de eliminar los backups y el historial. No los
 #+BEGIN_SRC emacs-lisp
 (setq visible-bell 1)
 (setq ring-bell-function 'ignore)
+#+END_SRC
+
+** Desactivar cursor blinking
+
+#+BEGIN_SRC emacs-lisp
+(blink-cursor-mode 0)
+#+END_SRC
+
+** Tamaño de fuente
+
+Cuando uso Emacs desde la consola puedo controlar el tamaño de fuente con =<Cmd>-+=, mientras que si uso el Emacs gráfico necesito configurar la fuente en 14pt para que no me quede demasiado pequeña. 
+
+#+BEGIN_SRC emacs-lisp
+(when (display-graphic-p)
+  (set-face-attribute 'default nil :height 140))
 #+END_SRC
 
 ** Themes
@@ -277,13 +302,13 @@ Produce HTML usando sintaxis abreviada basada en selectores CSS - [[https://gith
 
 Ejemplo: Ingresando la siguiente abreviación =ul>li.item$*3= y luego presionando =C-j= se genera el un UL con tres LI de clase "itemX"
 
-#+BEGIN_ASCII
+#+BEGIN_SRC text
 <ul>
    <li class="item1"></li>
    <li class="item2"></li>
    <li class="item3"></li>
 </ul>
-#+END_ASCII
+#+END_SRC text
 
 #+BEGIN_SRC emacs-lisp
 (use-package emmet-mode 
@@ -428,7 +453,7 @@ https://github.com/clojure-emacs/cider
 http://cider.readthedocs.io/en/latest/
 
 #+BEGIN_SRC emacs-lisp :eval never
-(use-package cider :ensure t)
+(use-package cider :disabled :ensure t)
 #+END_SRC
 
 *** clojure-mode
@@ -436,7 +461,7 @@ http://cider.readthedocs.io/en/latest/
 https://github.com/clojure-emacs/clojure-mode
 
 #+BEGIN_SRC emacs-lisp :eval never
-(use-package clojure-mode :ensure t)
+(use-package clojure-mode :disabled :ensure t)
 #+END_SRC
 
 *** parinfer
@@ -445,6 +470,7 @@ https://github.com/DogLooksGood/parinfer-mode
 
 #+BEGIN_SRC emacs-lisp :eval never
 (use-package parinfer
+  :disabled
   :ensure t
   :bind
   (("C-," . parinfer-toggle-mode))
@@ -557,10 +583,20 @@ point reaches the beginning or end of the buffer, stop there."
 
 ** Alternativa para Meta-X
 
-Estoy probando [[https://termux.com/][Termux]], que permite usar emacs en Android. En el teclado bluetooth que estoy usando no me funciona la tecla Alt, así que necesito una alternativa para M-x. En [[https://sites.google.com/site/steveyegge2/effective-emacs][Effective Emacs]], Steve Yegge recomienda usar =C-x C-m=, y esa combinación es la que voy a usar.
+   Estoy probando [[https://termux.com/][Termux]], que es una aplicación que permite instalar emacs en Android. En el teclado bluetooth que uso no me funciona la tecla Alt, así que necesito una alternativa para M-x. En [[https://sites.google.com/site/steveyegge2/effective-emacs][Effective Emacs]], Steve Yegge recomienda usar =C-x C-m=, y esa combinación es la que voy a usar.
 
 #+BEGIN_SRC emacs-lisp
-(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-x\C-m" 'smex)
+#+END_SRC
+
+** Backward-kill-word
+
+Otro consejo que saqué de [[https://sites.google.com/site/steveyegge2/effective-emacs][Effective Emacs]]. Ya me había pasado muy frecuentemente que apretaba =C-w= sin querer y me borraba todo el párrafo. Ahora la tecla =C-w= va a borrar la última palabra que escribí, y para borrar el párrafo (=kill-region=) deberé apretar =C-c C-k=.
+
+#+BEGIN_SRC emacs-lisp
+;(global-set-key "\C-w" 'backward-kill-word)
+;(global-set-key "\C-x\C-k" 'kill-region)
+;(global-set-key "\C-c\C-k" 'kill-region)
 #+END_SRC
 
 * Org-Mode
@@ -572,7 +608,43 @@ Este modo mejora la legibilidad para documentos con muchos ítems, indentando lo
 (setq org-startup-indented nil)
 #+END_SRC
 
-** Código fuente: Sintaxis en colores
+** Org-Present: Presentaciones
+
+Ultra-minimalist presentation minor-mode for Emacs org-mode - [[https://github.com/rlister/org-present][Github]]
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-present :ensure t)
+#+END_SRC
+
+** TODO Configuración
+
+Tengo que encontrar la manera de ocultar la mode-line cuando se inicia el modo org-present y mostrarla cuando se sale de la presentación.
+
+Traté de usar los hooks pero me oculta la línea y después no la puedo volver a mostrar.
+
+#+BEGIN_QUOTE
+Precise behaviour of org-present during start and quit is controlled from hooks. The following will enlarge text, show images, hide the cursor and make the buffer read-only:
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp :eval never
+(eval-after-load "org-present"
+  '(progn
+     (add-hook 'org-present-mode-hook
+               (lambda ()
+                 (org-present-big)
+                 (org-display-inline-images)
+                 (org-present-hide-cursor)
+                 (org-present-read-only)))
+     (add-hook 'org-present-mode-quit-hook
+               (lambda ()
+                 (org-present-small)
+                 (org-remove-inline-images)
+                 (org-present-show-cursor)
+                 (org-present-read-write)))))
+#+END_SRC
+
+* Org-Mode: Código fuente
+** Sintaxis en colores
 *** En el buffer
 
    Esta opción permite que los bloques de código en org-mode tengan syntax highlighting.
@@ -616,11 +688,11 @@ Para configurar el color de fondo de los bloques de código fuente es necesario 
 Además se puede seleccionar el estilo del highlighting con el comando =\usemintedstyle{}=.
 
 #+NAME: minted-color
-#+BEGIN_ASCII
+#+BEGIN_SRC text
 #+LaTeX_HEADER: \usemintedstyle{default}
 #+LaTeX_HEADER: \usepackage{xcolor}
 #+LaTeX_HEADER: \definecolor{bg}{rgb}{0.95,0.95,0.95}
-#+END_ASCII
+#+END_SRC text
 
 Los estilos disponibles se pueden consultar con =pygmentize -L styles=
 
@@ -642,7 +714,7 @@ Defino una función para insertar los headers que me permiten configurar el colo
 **** Themes
 ***** Readtheorg
 #+NAME: readtheorg
-#+BEGIN_ASCII
+#+BEGIN_SRC text
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
 #+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -650,11 +722,11 @@ Defino una función para insertar los headers que me permiten configurar el colo
 #+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
 #+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>
 #+HTML_HEAD: <style type="text/css">pre {background-color: #ddd}</style>
-#+END_ASCII
+#+END_SRC text
 
 ***** Bigblow
 #+NAME: bigblow
-#+BEGIN_ASCII
+#+BEGIN_SRC text
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/htmlize.css"/>
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/bigblow.css"/>
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/hideshow.css"/>
@@ -667,7 +739,7 @@ Defino una función para insertar los headers que me permiten configurar el colo
 #+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/hideshow.js"></script>
 #+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
 #+HTML_HEAD: <style type="text/css">pre {background-color: #ddd}</style>
-#+END_ASCII
+#+END_SRC text
 
 **** Insertar theme 
 
@@ -694,15 +766,24 @@ Defino una función para insertar los headers que me permiten configurar el colo
 
 ***** TODO Modificar la carga de themes para que use la directiva =+#SETUPFILE=
 
-** Código fuente: Indentación
+** Indentación
 
 Este comando elimina toda intentación en el bloque de código luego de editarlo con =C-c C-'=. Por defecto, org-mode agrega 2 espacios en el margen izquierdo, lo que modifica la indentación correcta del lenguaje correspondiente.
 
 #+BEGIN_SRC emacs-lisp
 (setq org-edit-src-content-indentation 0)
+(setq org-src-tab-acts-natively t)
+(defun my/indent-org-src ()
+  "Indent source code inside an org-src-block"
+  (interactive)
+  (save-excursion
+    (org-edit-src-code)
+    (mark-whole-buffer)
+    (indent-for-tab-command)
+    (org-edit-src-exit)))
 #+END_SRC
 
-** TODO Código fuente: check settings
+** TODO Check Settings
 
 source: https://github.com/EnigmaCurry/emacs/blob/master/config.org#org-babelsource-blocks
 
@@ -720,13 +801,46 @@ I noticed that fontification doesn’t work with markdown mode when the block is
       org-src-tab-acts-natively t)
 #+END_SRC
 
-** Código fuente: Edición en otra ventana
+** Expand named block
+
+#+BEGIN_QUOTE
+Johan W. Klüwer <johan.w.kluwer@gmail.com>
+
+Is there a way to assign the uninterpreted content of an executable source block to a variable? Preferably, using a :var header argument? That is, return the text in the block, not the result of evaluating it, and preferably with noweb references expanded.
+
+"example" blocks return text the way I want, but they can't be evaluated, and of course noweb is ruled out for them.
+
+The function org-babel-ref-resolve could to the job if there were a switch to block evaluation.
+
+
+Why this is interesting: I wish to use url-hexify-string on the text of a named SPARQL query.
+
+#+END_QUOTE
+
+Ejemplo de uso
+
+#+BEGIN_SRC text
+
+BEGIN_SRC emacs-lisp :var qry=(expand-named-babel-block "qry-test-B")
+(url-hexify-string qry)
+END_SRC
+
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :eval never
+(defun my/expand-named-babel-block (block)
+    (save-excursion
+    (org-babel-goto-named-src-block block)
+    (org-babel-expand-src-block)))
+#+END_SRC
+
+** Edición en otra ventana
 
 #+BEGIN_SRC emacs-lisp
 (setq org-src-window-setup 'other-window)
 #+END_SRC
 
-** Org-Babel: Lenguajes de programación
+** Lenguajes de programación
 
 #+BEGIN_SRC emacs-lisp
 (with-eval-after-load 'org
@@ -740,41 +854,6 @@ I noticed that fontification doesn’t work with markdown mode when the block is
 
 ;; don't ask for confirmation to run code block
 (setq org-confirm-babel-evaluate nil)
-#+END_SRC
-
-** Org-Present: Presentaciones
-
-Ultra-minimalist presentation minor-mode for Emacs org-mode - [[https://github.com/rlister/org-present][Github]]
-
-#+BEGIN_SRC emacs-lisp
-(use-package org-present :ensure t)
-#+END_SRC
-
-*** TODO Configuración
-
-Tengo que encontrar la manera de ocultar la mode-line cuando se inicia el modo org-present y mostrarla cuando se sale de la presentación.
-
-Traté de usar los hooks pero me oculta la línea y después no la puedo volver a mostrar.
-
-#+BEGIN_QUOTE
-Precise behaviour of org-present during start and quit is controlled from hooks. The following will enlarge text, show images, hide the cursor and make the buffer read-only:
-#+END_QUOTE
-
-#+BEGIN_SRC emacs-lisp :eval never
-(eval-after-load "org-present"
-  '(progn
-     (add-hook 'org-present-mode-hook
-               (lambda ()
-                 (org-present-big)
-                 (org-display-inline-images)
-                 (org-present-hide-cursor)
-                 (org-present-read-only)))
-     (add-hook 'org-present-mode-quit-hook
-               (lambda ()
-                 (org-present-small)
-                 (org-remove-inline-images)
-                 (org-present-show-cursor)
-                 (org-present-read-write)))))
 #+END_SRC
 
 * Paquetes Varios
@@ -825,12 +904,21 @@ Modifico la tecla "q" para que destruya el buffer cuando lo cierro.
 
 ** Editor tools
 
-   El paquete *windresize* permite cambiar el tamaño de las ventanas utilizando las flechas del teclado. El paquete *mwe-log-commands* permite tener un buffer donde se van logueando todos los comandos que se ejecutan en el editor. El paquete *buffer-move* agrega la funcionalidad para intercambiar las ventanas del editor (izq<>der, arriba<>abajo).
+- windresize :: Permite cambiar el tamaño de las ventanas utilizando las flechas del teclado
+
+- mwe-log-commands :: Permite tener un buffer donde se van logueando todos los comandos que se ejecutan en el editor
+
+- buffer-move :: Permite intercambiar los buffers del editor (izq<>der, arriba<>abajo)
 
 #+BEGIN_SRC emacs-lisp
 (use-package windresize :ensure t)
 (use-package mwe-log-commands :ensure t)
-(use-package buffer-move :ensure t)
+(use-package buffer-move
+  :ensure t
+  :bind (("s-<left>" . buf-move-left)
+         ("s-<right>" . buf-move-right)
+         ("s-<up>" . buf-move-up)
+         ("s-<down>" . buf-move-down)))
 #+END_SRC
 
 * TODO Paquetes para evaluar
