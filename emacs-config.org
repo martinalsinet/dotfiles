@@ -52,6 +52,7 @@
 - http://pages.sachachua.com/.emacs.d/Sacha.html#orgc27e81e
 - https://gitlab.com/buildfunthings/emacs-config/blob/master/loader.org
 - https://github.com/EnigmaCurry/emacs/blob/master/config.org
+- https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
 
 * Información Personal
 
@@ -121,17 +122,27 @@ Tengo que analizar la posibilidad de eliminar los backups y el historial. No los
   
 * Environment
 
+Cuando utilizo emacs en modo gráfico hay algunas variables del entorno que no están disponibles de la misma manera que cuando se usa desde la terminal.
+
+** Path
+
 #+BEGIN_SRC emacs-lisp
 (when (display-graphic-p)
   (setenv "PATH"
           (concat (getenv "PATH")
-                  ":/usr/local/bin"
-                  ":~/bin")))
+                  ":/usr/local/bin:~/bin")))
+#+END_SRC
+
+** GPG
+
+#+BEGIN_SRC emacs-lisp
+(when (display-graphic-p)
+  (setq epa-pinentry-mode 'loopback))
 #+END_SRC
 
 * Apariencia
 
-  En esta sección puse las preferencias que tienen que ver con el aspecto visual del editor. Ya sea que use Emacs desde una consola o desde la interface gráfica nativa, me manejo para todo con el teclado, entonces no necesito ocupar espacio de la pantalla con barras de menú o herramientas, y además desactivo todos los sonidos y el parpadeo del cursor porque me parecen muy molestos.
+  En esta sección puse las preferencias que tienen que ver con el aspecto visual del editor. Ya sea que use Emacs desde una consola o desde el modo gráfico nativo, me manejo para todo con el teclado, entonces no necesito ocupar espacio de la pantalla con barras de menú o herramientas, y además desactivo todos los sonidos y el parpadeo del cursor porque me parecen extremadamente molestos.
   
 ** Desactivar ventanas y menús
 
@@ -599,6 +610,16 @@ Otro consejo que saqué de [[https://sites.google.com/site/steveyegge2/effective
 ;(global-set-key "\C-c\C-k" 'kill-region)
 #+END_SRC
 
+** Insertar ß
+
+Configuro el atajo =Alt-s= para que inserte el caracter alemán ß. Cuando uso emacs desde la consola aparentemente no es necesario, pero sí cuando estoy en el modo gráfico.
+
+#+BEGIN_SRC emacs-lisp
+(when (display-graphic-p)
+  (defun my/insert-ss () (interactive) (insert "ß"))
+  (global-set-key (kbd "M-s") 'my/insert-ss))
+#+END_SRC
+
 * Org-Mode
 ** Org-indent-mode
 
@@ -641,6 +662,16 @@ Precise behaviour of org-present during start and quit is controlled from hooks.
                  (org-remove-inline-images)
                  (org-present-show-cursor)
                  (org-present-read-write)))))
+#+END_SRC
+
+** Prettify Entities
+
+Muestra las entidades de Org-Mode con sus respectivos caracteres Unicode. Por ejemplo, para \le se muestra ≤.
+
+Con =M-x org-entities-help= se puede consultar la tabla de entidades.
+
+#+BEGIN_SRC emacs-lisp
+;(org-toggle-pretty-entities)
 #+END_SRC
 
 * Org-Mode: Código fuente
@@ -692,7 +723,7 @@ Además se puede seleccionar el estilo del highlighting con el comando =\usemint
 #+LaTeX_HEADER: \usemintedstyle{default}
 #+LaTeX_HEADER: \usepackage{xcolor}
 #+LaTeX_HEADER: \definecolor{bg}{rgb}{0.95,0.95,0.95}
-#+END_SRC text
+#+END_SRC
 
 Los estilos disponibles se pueden consultar con =pygmentize -L styles=
 
@@ -702,12 +733,18 @@ pygmentize -L styles
 
 Defino una función para insertar los headers que me permiten configurar el color de fondo y los estilos del highlighting.
 
-#+BEGIN_SRC emacs-lisp :var minted=minted-color
-(defvar my/org-pdf-src-style-color minted)
+#+BEGIN_SRC emacs-lisp
+(defun expand-named-babel-block (block)
+    (save-excursion
+    (org-babel-goto-named-src-block block)
+    (org-babel-expand-src-block)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :var minted=(expand-named-babel-block "minted-color")
 (defun my/org-pdf-src-style () 
    "Insert latex source code preamble for org export"
    (interactive)
-   (insert my/org-pdf-src-style-color))
+   (insert minted))
 #+END_SRC
 
 *** Al exportar a HTML
@@ -930,6 +967,7 @@ https://github.com/vermiculus/sx.el
 
 YouTube: Conquering Your Finances with Emacs and Ledger
 https://www.youtube.com/watch?v=cjoCNRpLanY&t=1155s
+
 ** Newsfeeds & Email in gnus
 ** escreen
 

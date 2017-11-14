@@ -18,6 +18,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
+ '(epg-gpg-program "/usr/local/bin/gpg")
  '(hl-sexp-background-color "#efebe9")
  '(package-selected-packages
    (quote

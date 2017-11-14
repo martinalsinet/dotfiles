@@ -34,11 +34,45 @@ export PATH=$PATH:~/bin
 
 * emacs
 
-Mis configuración de *emacs* la llevo aparte en los archivos [[file:emacs-init.el][emacs-init.el]] y [[file:emacs-config.org][emacs-config.org]]
+Mis configuración de *emacs* se encuentra en los archivos:
+
+- [[file:emacs-init.el][emacs-init.el]]
+- [[file:emacs-config.org][emacs-config.org]]
+
+* Paquetes
+*** Mac OS X (brew)
+**** Paquetes instalados
+
+#+BEGIN_SRC sh
+brew list > packages-brew.txt
+#+END_SRC
+
+#+NAME: packages
+#+BEGIN_SRC sh
+cat packages-brew.txt | tr "\n" " " 
+#+END_SRC
+
+#+RESULTS: packages
+: ack adns aspell autoconf automake bdw-gc dos2unix emacs ffmpeg gdbm gettext ghostscript glib gmp gnu-typist gnupg gnutls jpeg lame libassuan libffi libgcrypt libgpg-error libksba libpng libssh2 libtasn1 libtiff libunistring libusb libvo-aacenc links little-cms2 midnight-commander nettle nmap npth openssl openssl@1.1 p11-kit pcre pinentry pkg-config readline s-lang shpotify sqlite ssh-copy-id unrar w3m x264 xvid xz
+
+**** Instalar
+
+#+BEGIN_SRC sh :var pkg=packages
+echo brew install $pkg
+#+END_SRC
+
+#+RESULTS:
+: ack adns aspell autoconf automake bdw-gc dos2unix emacs ffmpeg gdbm gettext ghostscript glib gmp gnu-typist gnupg gnutls jpeg lame libassuan libffi libgcrypt libgpg-error libksba libpng libssh2 libtasn1 libtiff libunistring libusb libvo-aacenc links little-cms2 midnight-commander nettle nmap npth openssl openssl@1.1 p11-kit pcre pinentry pkg-config readline s-lang shpotify sqlite ssh-copy-id unrar w3m x264 xvid xz
+
+**** Actualizar
+
+#+BEGIN_SRC sh
+brew upgrade
+#+END_SRC
 
 * setup
 
-Ejecutar =org-babel-tangle= y luego ejectuar el bloque de código a continuación con =C-c C-c=
+Ejecutar =org-babel-tangle= y luego ejectuar el siguiente bloque de código con =C-c C-c=
 
 #+BEGIN_SRC sh
 cd ~
