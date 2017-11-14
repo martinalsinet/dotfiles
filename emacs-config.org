@@ -733,14 +733,14 @@ pygmentize -L styles
 
 Defino una función para insertar los headers que me permiten configurar el color de fondo y los estilos del highlighting.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :eval never
 (defun expand-named-babel-block (block)
     (save-excursion
     (org-babel-goto-named-src-block block)
     (org-babel-expand-src-block)))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :var minted=(expand-named-babel-block "minted-color")
+#+BEGIN_SRC emacs-lisp :eval never
 (defun my/org-pdf-src-style () 
    "Insert latex source code preamble for org export"
    (interactive)
