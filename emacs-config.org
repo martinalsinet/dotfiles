@@ -506,7 +506,9 @@ https://github.com/DogLooksGood/parinfer-mode
 #+BEGIN_SRC emacs-lisp
 (use-package geiser 
   :ensure t
-  :config (setq geiser-scheme-implementation 'mit))
+  :config (progn 
+            (add-hook 'scheme-mode-hook 'geiser-mode)
+            (setq geiser-scheme-implementation 'mit)))
 #+END_SRC
 
 * Movimiento del Cursor
@@ -878,6 +880,27 @@ END_SRC
 #+END_SRC
 
 ** Lenguajes de programación
+*** ob-php
+
+Hay dos paquetes diferentes que se llaman *ob-php* y cuyos URLs de GitHub son casi iguales:
+
+1. https://github.com/stardiviner/ob-php
+
+2. https://github.com/steckerhalter/ob-php
+
+El primero tiene un bug que no permite ejecutar los bloques de código PHP y es necesario patchearlo para que funcione, y tampoco es que funciona del todo bien (ver https://github.com/stardiviner/ob-php/issues/1)
+
+El segundo funciona bien, pero no está disponible en MELPA, así hay que instalarlo manualmente con el siguiente bloque:
+
+#+BEGIN_SRC emacs-lisp
+(unless (require 'ob-php nil 'noerror)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.github.com/steckerhalter/ob-php/master/ob-php.el")
+    (eval-buffer)))
+(require 'ob-php)
+#+END_SRC
+
+*** org-babel languages
 
 #+BEGIN_SRC emacs-lisp
 (with-eval-after-load 'org
@@ -885,6 +908,7 @@ END_SRC
     'org-babel-load-languages
           '((scheme . t)
             (python . t)
+            (php . t)
             (shell . t)
             (js . t)
             (emacs-lisp . t))))
