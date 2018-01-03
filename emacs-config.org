@@ -228,6 +228,46 @@ Switch Theme ([[https://www.reddit.com/r/emacs/comments/30b67j/how_can_you_reset
 (switch-theme 'zenburn)
 #+END_SRC
 
+** Fuente FiraCode
+
+   Me gusta usar la fuente [[https://github.com/tonsky/FiraCode][FiraCode]] porque tiene la funcionalidad /programming ligatures/, que hace que algunos de los símbolos más utilizados en programación se vean mejor. 
+
+   En caso de usar emacs desde la consola no es necesario setear la fuente en la configuración, porque se hereda la fuente que tenga la consola.
+
+#+BEGIN_SRC emacs-lisp
+(when (window-system)
+  (set-default-font "Fira Code"))
+(let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
+               (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
+               (36 . ".\\(?:>\\)")
+               (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
+               (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
+               (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
+               (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
+               (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
+               (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
+               (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
+               (48 . ".\\(?:x[a-zA-Z]\\)")
+               (58 . ".\\(?:::\\|[:=]\\)")
+               (59 . ".\\(?:;;\\|;\\)")
+               (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
+               (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
+               (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
+               (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
+               (91 . ".\\(?:]\\)")
+               (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
+               (94 . ".\\(?:=\\)")
+               (119 . ".\\(?:ww\\)")
+               (123 . ".\\(?:-\\)")
+               (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
+               (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
+               )
+             ))
+  (dolist (char-regexp alist)
+    (set-char-table-range composition-function-table (car char-regexp)
+                          `([,(cdr char-regexp) 0 font-shape-gstring]))))
+#+END_SRC
+
 * Edición de Texto
 ** Indentación con espacios
 
@@ -631,7 +671,7 @@ Este modo mejora la legibilidad para documentos con muchos ítems, indentando lo
 (setq org-startup-indented nil)
 #+END_SRC
 
-** Org-Present: Presentaciones
+** Org-present: Presentaciones
 
 Ultra-minimalist presentation minor-mode for Emacs org-mode - [[https://github.com/rlister/org-present][Github]]
 
@@ -668,12 +708,18 @@ Precise behaviour of org-present during start and quit is controlled from hooks.
 
 ** Prettify Entities
 
-Muestra las entidades de Org-Mode con sus respectivos caracteres Unicode. Por ejemplo, para \le se muestra ≤.
+Muestra las entidades de Org-Mode con sus respectivos caracteres Unicode. Por ejemplo, para \​le se muestra ≤.
 
 Con =M-x org-entities-help= se puede consultar la tabla de entidades.
 
 #+BEGIN_SRC emacs-lisp
-;(org-toggle-pretty-entities)
+(org-toggle-pretty-entities)
+#+END_SRC
+
+** Exportar a Markdown
+
+#+BEGIN_SRC emacs-lisp
+(require 'ox-md)
 #+END_SRC
 
 * Org-Mode: Código fuente
@@ -900,6 +946,13 @@ El segundo funciona bien, pero no está disponible en MELPA, así hay que instal
 (require 'ob-php)
 #+END_SRC
 
+Para cambiar el intérprete de PHP que usa org-mode es necesario configurar el nombre del comando en la variable =org-babel-php-command=.
+
+#+BEGIN_SRC emacs-lisp :eval never
+;(setq org-babel-php-command "php-5.6")
+;(setq org-babel-php-command "php-7")
+#+END_SRC
+
 *** org-babel languages
 
 #+BEGIN_SRC emacs-lisp
@@ -911,6 +964,7 @@ El segundo funciona bien, pero no está disponible en MELPA, así hay que instal
             (php . t)
             (shell . t)
             (js . t)
+            (sqlite . t)
             (emacs-lisp . t))))
 
 ;; don't ask for confirmation to run code block
