@@ -126,12 +126,37 @@ Cuando utilizo emacs en modo gráfico hay algunas variables del entorno que no e
 
 ** Path
 
+Me encontré con el problema que cuando usaba Emacs en modo gráfico desde Mac OS X a menudo tenía problemas para lanzar programas de consola desde el editor. Sin embargo, si inicio Emacs desde la consola el problema no aparece. Primero pensé que era un problema del PATH, pero luego me di cuenta de que además del PATH es necesario configurar la variable /exec-path/.
+
 #+BEGIN_SRC emacs-lisp
 (when (display-graphic-p)
   (setenv "PATH"
           (concat (getenv "PATH")
-                  ":/usr/local/bin:~/bin")))
+                  ":/usr/local/bin:~/bin"))
+  (setq exec-path 
+        (append exec-path 
+                '("/usr/local/bin" "~/bin"))))
 #+END_SRC
+
+En [[https://emacs.stackexchange.com/questions/550/exec-path-and-path][Emacs Stack Exchange]] encontré la explicación de este comportamiento:
+
+#+BEGIN_QUOTE
+*3) Mac OS' PATH*
+The problem on Mac OS X is that Mac OS does not set the environment the same when you call a program from the global UI or when you call it from a shell. This means that running Emacs from a shell will result in different environment variables being set than when you run it from the finder. This is especially annoying if you set environment variables in .bashrc or similar, as that won't affect the "global" Emacs.
+#+END_QUOTE
+
+En [[http://ergoemacs.org/emacs/emacs_env_var_paths.html][ErgoEmacs]], además, encontré la diferencia entre /PATH/ y /exec-path/:
+
+#+BEGIN_QUOTE
+Emacs has a variable named exec-path. Its value is a list of dir paths. Emacs uses exec-path to find executable binary programs. For example, when spell checking, emacs will try to find ispell or aspell in exec-path. When you press Z to compress file in dired, emacs will try to find gzip or gunzip in exec-path. When you call any of emacs commands: {diff, grep, shell}, emacs will try to find the program in exec-path too.
+
+/If emacs complains that it cannot find ispell, aspell, ftp, gzip, etc, the problem is probably with your exec-path/.
+
+*Difference between exec-path and PATH*
+
+- The value of environment variable “PATH” is used by emacs when you are running a shell in emacs, similar to when you are using a shell in a terminal.
+- The exec-path is used by emacs itself to find programs it needs for its features, such as spell checking, file compression, compiling, grep, diff, etc.
+#+END_QUOTE
 
 ** GPG
 
@@ -170,7 +195,7 @@ Cuando utilizo emacs en modo gráfico hay algunas variables del entorno que no e
 
 ** Tamaño de fuente
 
-Cuando uso Emacs desde la consola puedo controlar el tamaño de fuente con =<Cmd>-+=, mientras que si uso el Emacs gráfico necesito configurar la fuente en 14pt para que no me quede demasiado pequeña. 
+Cuando uso Emacs desde la consola puedo controlar el tamaño de fuente con el teclado (= <Cmd> + =), mientras que si uso el Emacs en modo gráfico es necesario configurar la fuente en 14pt para que no quede demasiado pequeña. 
 
 #+BEGIN_SRC emacs-lisp
 (when (display-graphic-p)
@@ -179,7 +204,7 @@ Cuando uso Emacs desde la consola puedo controlar el tamaño de fuente con =<Cmd
 
 ** Themes
 
-  Como conjunto de colores utilizo el *zenburn-theme*, que es conjunto de colores obscuro (letras en blanco y en color sobre un fondo negro) que cansa menos la vista que el conjunto por defecto (letras en negro y en color sobre un fondo blanco).
+  Como conjunto de colores utilizo el *zenburn-theme*, que es conjunto de colores obscuro (letras en blanco y en color sobre un fondo negro) que cansa menos la vista que el conjunto por defecto (letras en negro y en color sobre un fondo blanco). Adicionalmente instalé dos conjuntos de colores claros (github y leuven).
 
 *** Themes disponibles
 
@@ -230,9 +255,9 @@ Switch Theme ([[https://www.reddit.com/r/emacs/comments/30b67j/how_can_you_reset
 
 ** Fuente FiraCode
 
-   Me gusta usar la fuente [[https://github.com/tonsky/FiraCode][FiraCode]] porque tiene la funcionalidad /programming ligatures/, que hace que algunos de los símbolos más utilizados en programación se vean mejor. 
+   Me gusta usar la fuente [[https://github.com/tonsky/FiraCode][FiraCode]] porque tiene la funcionalidad /programming ligatures/, que hace que algunos de los símbolos más utilizados en programación se vean mejor. En caso de usar emacs desde la consola no es necesario setear la fuente en la configuración porque el editor hereda la fuente que tenga la consola.
 
-   En caso de usar emacs desde la consola no es necesario setear la fuente en la configuración, porque se hereda la fuente que tenga la consola.
+Configuración: https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
 
 #+BEGIN_SRC emacs-lisp
 (when (window-system)
@@ -267,6 +292,8 @@ Switch Theme ([[https://www.reddit.com/r/emacs/comments/30b67j/how_can_you_reset
     (set-char-table-range composition-function-table (car char-regexp)
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
 #+END_SRC
+
+#+RESULTS:
 
 * Edición de Texto
 ** Indentación con espacios
@@ -407,7 +434,9 @@ Opciones Disponibles:
 Improved Javascript Mode - [[https://github.com/mooz/js2-mode][Github]]
 
 #+BEGIN_SRC emacs-lisp
-(use-package js2-mode :ensure t)
+(use-package js2-mode 
+  :mode (("\\.js\\'" . web-mode))
+  :ensure t)
 #+END_SRC
 
 ** PHP Mode
@@ -549,6 +578,14 @@ https://github.com/DogLooksGood/parinfer-mode
   :config (progn 
             (add-hook 'scheme-mode-hook 'geiser-mode)
             (setq geiser-scheme-implementation 'mit)))
+#+END_SRC
+
+** Apache Mode
+
+Muestra los archivos de configuración de apache (httpd.conf, .htaccess) con la sintaxis en colores
+
+#+BEGIN_SRC emacs-lisp
+(use-package apache-mode :ensure t)
 #+END_SRC
 
 * Movimiento del Cursor
@@ -965,11 +1002,14 @@ Para cambiar el intérprete de PHP que usa org-mode es necesario configurar el n
             (shell . t)
             (js . t)
             (sqlite . t)
+            (sql . t)
             (emacs-lisp . t))))
 
 ;; don't ask for confirmation to run code block
 (setq org-confirm-babel-evaluate nil)
 #+END_SRC
+
+#+RESULTS:
 
 * Paquetes Varios
 ** Autocomplete
@@ -992,7 +1032,14 @@ Para cambiar el intérprete de PHP que usa org-mode es necesario configurar el n
 ** Projectile
 
 #+BEGIN_SRC emacs-lisp
-(use-package projectile :ensure t)
+(use-package projectile 
+  :ensure t
+  :config
+  (setq projectile-mode-line
+        '(:eval (format " Projectile[%s(%s)]"
+                        (projectile-project-name))))
+  (projectile-global-mode)
+  (setq projectile-require-project-root nil))
 #+END_SRC
 
 ** Magit
