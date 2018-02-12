@@ -21,6 +21,9 @@ alias dim='docker images'
 docker-du(){
     docker images | grep MB | awk '{print $7}' | awk '{s+=$1} END {print s" MB"}'
 }
+docker-rmi-none() {
+    docker images | grep none | awk '{print $3}' | xargs docker rmi
+}
 
 # git
 alias gl='git log --pretty=oneline'
