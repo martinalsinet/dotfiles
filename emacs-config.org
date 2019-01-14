@@ -85,6 +85,8 @@
   (package-install 'use-package))
 #+END_SRC
 
+#+RESULTS:
+
 * Backups e Historial
 *** TODO Analizar si lo borro
 
@@ -258,6 +260,9 @@ Switch Theme ([[https://www.reddit.com/r/emacs/comments/30b67j/how_can_you_reset
    Me gusta usar la fuente [[https://github.com/tonsky/FiraCode][FiraCode]] porque tiene la funcionalidad /programming ligatures/, que hace que algunos de los símbolos más utilizados en programación se vean mejor. En caso de usar emacs desde la consola no es necesario setear la fuente en la configuración porque el editor hereda la fuente que tenga la consola.
 
 Configuración: https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
+
+- TODO: Agregar condición que verifique que la fuente Fira Code esté instalada
+;; (when (member "Fira Code" (font-family-list)) ... )
 
 #+BEGIN_SRC emacs-lisp
 (when (window-system)
@@ -438,6 +443,10 @@ Improved Javascript Mode - [[https://github.com/mooz/js2-mode][Github]]
   :mode (("\\.js\\'" . web-mode))
   :ensure t)
 #+END_SRC
+
+*** TODO Settings disponibles
+
+https://github.com/redguardtoo/emacs.d/blob/master/lisp/init-javascript.el
 
 ** PHP Mode
 
@@ -700,6 +709,15 @@ Configuro el atajo =Alt-s= para que inserte el caracter alemán ß. Cuando uso e
 #+END_SRC
 
 * Org-Mode
+** Org-tempo
+
+A partir de la versión 9.2 se desactivaron los atajos (<s, <a, etc) para crear bloques de código. En su lugar es necesario activar el módulo *org-tempo*.
+
+#+begin_src emacs-lisp
+(when (version< "9.1" org-version)
+  (require 'org-tempo))
+#+end_src
+
 ** Org-indent-mode
 
 Este modo mejora la legibilidad para documentos con muchos ítems, indentando los bloques a medida que se va entrando en la jerarquía del documento.
@@ -978,7 +996,7 @@ El segundo funciona bien, pero no está disponible en MELPA, así hay que instal
 #+BEGIN_SRC emacs-lisp
 (unless (require 'ob-php nil 'noerror)
   (with-temp-buffer
-    (url-insert-file-contents "https://raw.github.com/steckerhalter/ob-php/master/ob-php.el")
+    (url-insert-file-contents "https://framagit.org/steckerhalter/ob-php/raw/master/ob-php.el")
     (eval-buffer)))
 (require 'ob-php)
 #+END_SRC
@@ -1041,7 +1059,7 @@ Si bien lo usé bastante al principio, ahora lo estoy reemplazando por ivy, coun
   :config
   (ivy-mode 1)
   ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
-  (setq ivy-use-virtual-buffers t)
+  ;; (setq ivy-use-virtual-buffers t)
   ;; number of result lines to display
   (setq ivy-height 10)
   ;; show matched/total count
@@ -1067,12 +1085,12 @@ Si bien lo usé bastante al principio, ahora lo estoy reemplazando por ivy, coun
   (progn
     (global-set-key "\C-s" 'swiper)
     (global-set-key "\C-r" 'swiper)
+    ;(global-set-key (kbd "C-c C-r") 'ivy-resume)
     (global-set-key (kbd "C-c u") 'swiper-all)
     (global-set-key (kbd "M-x") 'counsel-M-x)
     (global-set-key (kbd "C-c a") 'counsel-ack)
     (global-set-key (kbd "C-x C-f") 'counsel-find-file)
     ; Buscar mejores teclas para estas funciones
-    ;(global-set-key (kbd "C-c C-r") 'ivy-resume)
     ;(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
     ;(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
     ;(global-set-key (kbd "C-x l") 'counsel-locate)
@@ -1090,6 +1108,18 @@ Si bien lo usé bastante al principio, ahora lo estoy reemplazando por ivy, coun
                         (projectile-project-name))))
   (projectile-global-mode)
   (setq projectile-require-project-root nil))
+#+END_SRC
+
+    ;(global-set-key (kbd "C-c C-r") 'ivy-resume)
+    (global-set-key (kbd "C-c u") 'swiper-all)
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-c a") 'counsel-ack)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    ; Buscar mejores teclas para estas funciones
+    ;(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    ;(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    ;(global-set-key (kbd "C-x l") 'counsel-locate)
+    ))
 #+END_SRC
 
 ** Magit
@@ -1149,10 +1179,10 @@ https://www.youtube.com/watch?v=cjoCNRpLanY&t=1155s
 - https://github.com/knu/elscreen
 - https://github.com/wasamasa/eyebrowse
 
-
 ** Indium: Javascript debugger 
 
 https://github.com/NicolasPetton/Indium
+
 ** Company mode: Autocomplete para métodos 
 
 - Company mode: http://company-mode.github.io/
