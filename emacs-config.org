@@ -264,7 +264,7 @@ Configuración: https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
 - TODO: Agregar condición que verifique que la fuente Fira Code esté instalada
 ;; (when (member "Fira Code" (font-family-list)) ... )
 
-Hay un problema de compatibilidad con =php-mode= que hace que Emacs se cuelgue cuando se abre un archivo con php-mode activo. Para evitarlo tuve que comentar las líneas 47 y 48.
+Hay un problema de compatibilidad con =php-mode= que hace que Emacs se cuelgue cuando se abre un archivo con php-mode activo. Para evitarlo tuve que comentar la línea 47.
 
 #+BEGIN_SRC emacs-lisp
 (when (window-system)
@@ -279,7 +279,7 @@ Hay un problema de compatibilidad con =php-mode= que hace que Emacs se cuelgue c
                (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
                (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
                ;(47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
-               ;(48 . ".\\(?:x[a-zA-Z]\\)")
+               (48 . ".\\(?:x[a-fA-F0-9]\\)")
                (58 . ".\\(?:::\\|[:=]\\)")
                (59 . ".\\(?:;;\\|;\\)")
                (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
