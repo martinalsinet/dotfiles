@@ -450,6 +450,22 @@ Improved Javascript Mode - [[https://github.com/mooz/js2-mode][Github]]
 
 https://github.com/redguardtoo/emacs.d/blob/master/lisp/init-javascript.el
 
+** PrettierJS
+
+PrettierJS for Emacs - [[https://github.com/prettier/prettier-emacs][Github]]
+
+#+BEGIN_SRC emacs-lisp
+(use-package prettier-js
+  :init  (add-hook 'js2-mode-hook 'prettier-js-mode)
+  :ensure t)
+#+END_SRC
+
+#+RESULTS:
+
+*** TODO Settings disponibles
+
+https://github.com/redguardtoo/emacs.d/blob/master/lisp/init-javascript.el
+
 ** PHP Mode
 
 #+BEGIN_SRC emacs-lisp
