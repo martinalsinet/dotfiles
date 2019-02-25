@@ -364,6 +364,7 @@ Hay un problema de compatibilidad con =php-mode= que hace que Emacs se cuelgue c
   :mode (("\\.phtml\\'" . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
          ("\\.twig\\.html\\'" . web-mode)
+         ("\\.blade\\.php\\'" . web-mode)
          ("\\.html?\\'" . web-mode))
   :config (progn 
             (setq web-mode-markup-indent-offset 2)
