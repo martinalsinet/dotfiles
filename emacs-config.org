@@ -1,9 +1,8 @@
-
-#+TITLE: Configuración de Emacs
-#+AUTHOR: Martín Alsinet
-#+DATE: 2017
-#+OPTIONS: toc:nil ':t num:nil
-#+LANGUAGE: en
+#+title: Configuración de Emacs
+#+author: Martín Alsinet
+#+date: 2017
+#+options: toc:nil ':t num:nil
+#+language: es
 
 * Motivación
 
@@ -988,11 +987,11 @@ END_SRC
 
 Hay dos paquetes diferentes que se llaman *ob-php* y cuyos URLs de GitHub son casi iguales:
 
-1. https://github.com/stardiviner/ob-php
+1. https://github.com/stardiviner/ob-php (Es parte de org-mode desde febrero de 2018)
 
-2. https://github.com/steckerhalter/ob-php
+2. https://framagit.org/steckerhalter/ob-php
 
-El primero tiene un bug que no permite ejecutar los bloques de código PHP y es necesario patchearlo para que funcione, y tampoco es que funciona del todo bien (ver https://github.com/stardiviner/ob-php/issues/1)
+El primero tenía un bug que no permite ejecutar los bloques de código PHP y es necesario patchearlo para que funcione, y tampoco es que funciona del todo bien (ver https://github.com/stardiviner/ob-php/issues/1)
 
 El segundo funciona bien, pero no está disponible en MELPA, así hay que instalarlo manualmente con el siguiente bloque:
 
@@ -1010,6 +1009,8 @@ Para cambiar el intérprete de PHP que usa org-mode es necesario configurar el n
 ;(setq org-babel-php-command "php-5.6")
 ;(setq org-babel-php-command "php-7")
 #+END_SRC
+
+**** TODO revisar ob-php de steckerhalter para ver si funcionan las sesiones y los errores
 
 *** org-babel languages
 
@@ -1053,6 +1054,8 @@ Si bien lo usé bastante al principio, ahora lo estoy reemplazando por ivy, coun
 #+END_SRC
 
 ** Autocomplete: ivy + counsel + swiper
+
+*Tip*: cuando queremos crear un nuevo archivo pero su nombre hace que =counsel-find-file= encuentre otros resultados, hay que apretar =C-M-j=
 
 #+BEGIN_SRC emacs-lisp
 (use-package ivy :ensure t
