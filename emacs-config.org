@@ -795,6 +795,18 @@ Con =M-x org-entities-help= se puede consultar la tabla de entidades.
 (require 'ox-md)
 #+END_SRC
 
+** Org-TOC
+
+Org-TOC es una utilidad que permite generar un índice del documento en una sección agregando el tag =TOC= con el comando =org-set-tags-command=. 
+
+Yo lo utilizo para generar el índice de mis documentos en GitHub. Se agrega un hook para que cada vez que se guarda el documento se actualice el índice.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-toc
+  :init  (add-hook 'org-mode-hook 'toc-org-mode)
+  :ensure t)
+#+END_SRC
+
 * Org-Mode: Código fuente
 ** Sintaxis en colores
 *** En el buffer
