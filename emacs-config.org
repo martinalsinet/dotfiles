@@ -454,13 +454,13 @@ https://github.com/redguardtoo/emacs.d/blob/master/lisp/init-javascript.el
 
 PrettierJS for Emacs - [[https://github.com/prettier/prettier-emacs][Github]]
 
+Para poder utilizar [[https://prettier.io/][prettierjs]] desde Emacs es necesario tener instalado el comando =prettier=. Teniendo nodejs instalado, es solamente cuestión de ejecutar =npm install --global prettier=. Hay que instalarlo globalmente si queremos poder ejecutar el comando prettier desde cualquier proyecto o archivo javascript. En Mac OS X se puede instalar con homebrew, con =brew install prettier=
+
 #+BEGIN_SRC emacs-lisp
 (use-package prettier-js
   :init  (add-hook 'js2-mode-hook 'prettier-js-mode)
   :ensure t)
 #+END_SRC
-
-#+RESULTS:
 
 *** TODO Settings disponibles
 
@@ -488,6 +488,14 @@ https://github.com/redguardtoo/emacs.d/blob/master/lisp/init-javascript.el
         (setq python-indent 4)
         (setq python-indent-offset 4)))
 #+END_SRC
+
+*** autopep8
+
+Para poder utilizar =py-autopep8= desde Emacs, obviamente hay que tener instalado el comando =autopep8= usando =pip install autopep8=.
+
+#+begin_src emacs-lisp
+(use-package py-autopep8 :ensure t)
+#+end_src
 
 ** Expand region
 
