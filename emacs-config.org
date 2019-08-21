@@ -489,7 +489,7 @@ https://github.com/redguardtoo/emacs.d/blob/master/lisp/init-javascript.el
         (setq python-indent-offset 4)))
 #+END_SRC
 
-*** autopep8
+** autopep8
 
 Para poder utilizar =py-autopep8= desde Emacs, obviamente hay que tener instalado el comando =autopep8= usando =pip install autopep8=.
 
@@ -803,14 +803,14 @@ Con =M-x org-entities-help= se puede consultar la tabla de entidades.
 (require 'ox-md)
 #+END_SRC
 
-** Org-TOC
+** TOC-Org
 
-Org-TOC es una utilidad que permite generar un índice del documento en una sección agregando el tag =TOC= con el comando =org-set-tags-command=. 
+TOC-org es una utilidad que permite generar un índice del documento en una sección agregando el tag =TOC= con el comando =org-set-tags-command=. 
 
 Yo lo utilizo para generar el índice de mis documentos en GitHub. Se agrega un hook para que cada vez que se guarda el documento se actualice el índice.
 
 #+BEGIN_SRC emacs-lisp
-(use-package org-toc
+(use-package toc-org
   :init  (add-hook 'org-mode-hook 'toc-org-mode)
   :ensure t)
 #+END_SRC
