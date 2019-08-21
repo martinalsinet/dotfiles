@@ -1182,6 +1182,7 @@ Modifico la tecla "q" para que destruya el buffer cuando lo cierro.
 #+BEGIN_SRC emacs-lisp
 (use-package yaml-mode :ensure t)
 (use-package markdown-mode :ensure t)
+(use-package markdown-toc :ensure t)
 (use-package json-mode :ensure t)
 (use-package dockerfile-mode :ensure t)
 #+END_SRC
