@@ -254,53 +254,6 @@ Switch Theme ([[https://www.reddit.com/r/emacs/comments/30b67j/how_can_you_reset
 (switch-theme 'zenburn)
 #+END_SRC
 
-** Fuente FiraCode
-
-   Me gusta usar la fuente [[https://github.com/tonsky/FiraCode][FiraCode]] porque tiene la funcionalidad /programming ligatures/, que hace que algunos de los símbolos más utilizados en programación se vean mejor. En caso de usar emacs desde la consola no es necesario setear la fuente en la configuración porque el editor hereda la fuente que tenga la consola.
-
-Configuración: https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
-
-- TODO: Agregar condición que verifique que la fuente Fira Code esté instalada
-;; (when (member "Fira Code" (font-family-list)) ... )
-
-Hay un problema de compatibilidad con =php-mode= que hace que Emacs se cuelgue cuando se abre un archivo con php-mode activo. Para evitarlo tuve que comentar la línea 47.
-
-#+BEGIN_SRC emacs-lisp
-(when (window-system)
-  (set-default-font "Fira Code"))
-(let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
-               (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
-               (36 . ".\\(?:>\\)")
-               (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
-               (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
-               (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
-               (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
-               (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
-               (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
-               ;(47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
-               (48 . ".\\(?:x[a-fA-F0-9]\\)")
-               (58 . ".\\(?:::\\|[:=]\\)")
-               (59 . ".\\(?:;;\\|;\\)")
-               (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
-               (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
-               (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
-               (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
-               (91 . ".\\(?:]\\)")
-               (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
-               (94 . ".\\(?:=\\)")
-               (119 . ".\\(?:ww\\)")
-               (123 . ".\\(?:-\\)")
-               (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
-               (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
-               )
-             ))
-  (dolist (char-regexp alist)
-    (set-char-table-range composition-function-table (car char-regexp)
-                          `([,(cdr char-regexp) 0 font-shape-gstring]))))
-#+END_SRC
-
-#+RESULTS:
-
 * Edición de Texto
 ** Indentación con espacios
 
@@ -1061,13 +1014,12 @@ Para cambiar el intérprete de PHP que usa org-mode es necesario configurar el n
             (js . t)
             (sqlite . t)
             (sql . t)
+            (java . t)
             (emacs-lisp . t))))
 
 ;; don't ask for confirmation to run code block
 (setq org-confirm-babel-evaluate nil)
 #+END_SRC
-
-#+RESULTS:
 
 * Paquetes Varios
 ** Autocomplete: ido
