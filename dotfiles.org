@@ -9,7 +9,7 @@
 
 Básicamente mi *.bashrc* configura los alias de los comandos que más utilizo en la consola y agrega la carpeta =~/bin= al =$PATH=.
 
-#+BEGIN_SRC sh :tangle build/bashrc
+#+BEGIN_SRC sh :tangle build/bashrc :mkdirp yes
 # ls
 alias l='ls -lt'
 alias ll='ls -alhG'

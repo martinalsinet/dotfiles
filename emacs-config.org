@@ -117,7 +117,7 @@
         regexp-search-ring))
 #+END_SRC
   
-* Environment
+* Environment & Shells
 
 Cuando utilizo emacs en modo gráfico hay algunas variables del entorno que no están disponibles de la misma manera que cuando se usa desde la terminal.
 
@@ -161,6 +161,57 @@ Emacs has a variable named exec-path. Its value is a list of dir paths. Emacs us
 (when (display-graphic-p)
   (setq epa-pinentry-mode 'loopback))
 #+END_SRC
+
+** Cut & Paste
+
+Cuando se utiliza en modo terminal hay que conectar el clipboard de Mac OS X con las funciones de cortar y pegar de Emacs.
+
+#+begin_src elisp
+(unless (display-graphic-p)
+  (defun copy-from-osx ()
+    (shell-command-to-string "pbpaste"))
+  
+  (defun paste-to-osx (text &optional push)
+    (let ((process-connection-type nil))
+      (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+        (process-send-string proc text)
+        (process-send-eof proc))))
+  
+  (setq interprogram-cut-function 'paste-to-osx)
+  (setq interprogram-paste-function 'copy-from-osx))
+
+#+end_src
+
+** Tramp
+
+Con TRAMP se puede acceder desde emacs a cualquier archivo en servidores externos de manera transparente, como si estuviera en la máquina local. Emacs se baja por ssh el archivo a un buffer local y cada vez que uno hace cambios y lo guarda, sube los cambios al servidor remoto automáticamente.
+
+#+begin_src elisp
+(setq tramp-default-method "ssh")
+(customize-set-variable 'tramp-syntax 'simplified)
+#+end_src
+
+** eshell
+
+#+begin_src elisp
+(setq eshell-prompt-function
+     (lambda ()
+       (concat
+        (propertize "\n┌─[" 'face `(:foreground "green"))
+        (propertize (concat (file-name-base (eshell/pwd))) 'face `(:foreground "white"))
+        (propertize "@" 'face `(:foreground "green"))
+        (if (magit-get-current-branch)
+            (propertize (magit-get-current-branch) 'face `(:foreground "yellow"))
+            (propertize "z" 'face `(:foreground "yellow")))
+        (propertize "]──[" 'face `(:foreground "green"))
+        (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "yellow"))
+        (propertize "]\n" 'face `(:foreground "green"))
+        (propertize "└─>" 'face `(:foreground "green"))
+        (propertize (if (= (user-uid) 0) " # " " $ ") 'face `(:foreground "green"))
+        )))
+
+(setenv "TERM" "xterm-256color")
+#+end_src
 
 * Apariencia
 
