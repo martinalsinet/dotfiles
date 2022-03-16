@@ -126,13 +126,12 @@ Cuando se utiliza emacs en modo gráfico hay algunas variables del entorno que n
 Me encontré con el problema que cuando usaba Emacs en modo gráfico desde Mac OS X a menudo tenía problemas para lanzar programas de consola desde el editor. Sin embargo, si inicio Emacs desde la consola el problema no aparece. Primero pensé que era un problema del PATH, pero luego me di cuenta de que además del PATH es necesario configurar la variable /exec-path/.
 
 #+BEGIN_SRC emacs-lisp
-(when (display-graphic-p)
-  (setenv "PATH"
-          (concat (getenv "PATH")
-                  ":/usr/local/bin:~/bin"))
-  (setq exec-path 
-        (append exec-path 
-                '("/usr/local/bin" "~/bin"))))
+(setenv "PATH"
+        (concat (getenv "PATH")
+                ":/usr/local/bin:~/bin"))
+(setq exec-path 
+      (append exec-path 
+              '("/usr/local/bin" "~/bin")))
 #+END_SRC
 
 En [[https://emacs.stackexchange.com/questions/550/exec-path-and-path][Emacs Stack Exchange]] encontré la explicación de este comportamiento:
@@ -647,13 +646,20 @@ Muestra los archivos de configuración de apache (httpd.conf, .htaccess) con la 
 (setq scroll-margin 3)
 #+END_SRC
 
-** Scroll: Corregir comportamiento en M-x shell
+** Scroll: Desactivar scroll-to-bottom en M-x shell
 
 #+BEGIN_SRC emacs-lisp
 ;; Don't scroll to bottom for shell output
 (setq comint-scroll-show-maximum-output nil)
 #+END_SRC
    
+** Scroll: Desactivar scroll-to-bottom en eshell
+
+#+BEGIN_SRC emacs-lisp
+;; Don't scroll to bottom for shell output
+(setq eshell-scroll-show-maximum-output nil)
+#+END_SRC
+
 ** Goto: Beginning of the line
 
 #+BEGIN_SRC emacs-lisp
@@ -756,13 +762,25 @@ Este modo mejora la legibilidad para documentos con muchos ítems, indentando lo
 (setq org-startup-indented nil)
 #+END_SRC
 
-** Org-present: Presentaciones
+** Presentaciones
+*** TODO Evaluar org-present vs org-tree-slide
+*** Org-present (deprecado?)
 
 Ultra-minimalist presentation minor-mode for Emacs org-mode - [[https://github.com/rlister/org-present][Github]]
 
 #+BEGIN_SRC emacs-lisp
 (use-package org-present :ensure t)
 #+END_SRC
+
+*** Org-tree-slide:
+
+The main purpose of this elisp is to handle each tree in an org buffer as a slide by simple narrowing. This emacs lisp is a minor mode for Emacs Org-mode. - [[https://github.com/takaxp/org-tree-slide][Github]]
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-tree-slide :ensure t)
+#+END_SRC
+
+#+RESULTS:
 
 ** TODO Configuración
 
@@ -953,16 +971,16 @@ Defino una función para insertar los headers que me permiten configurar el colo
 Este comando elimina toda intentación en el bloque de código luego de editarlo con =C-c C-'=. Por defecto, org-mode agrega 2 espacios en el margen izquierdo, lo que modifica la indentación correcta del lenguaje correspondiente.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-edit-src-content-indentation 0)
-(setq org-src-tab-acts-natively t)
-(defun my/indent-org-src ()
-  "Indent source code inside an org-src-block"
-  (interactive)
-  (save-excursion
-    (org-edit-src-code)
-    (mark-whole-buffer)
-    (indent-for-tab-command)
-    (org-edit-src-exit)))
+;;(setq org-edit-src-content-indentation 0)
+;;(setq org-src-tab-acts-natively t)
+;;(defun my/indent-org-src ()
+;;  "Indent source code inside an org-src-block"
+;;  (interactive)
+;;  (save-excursion
+;;    (org-edit-src-code)
+;;    (mark-whole-buffer)
+;;    (indent-for-tab-command)
+;;    (org-edit-src-exit)))
 #+END_SRC
 
 ** TODO Check Settings
