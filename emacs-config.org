@@ -1184,25 +1184,6 @@ Modifico la tecla "q" para que destruya el buffer cuando lo cierro.
 (use-package dockerfile-mode :ensure t)
 #+END_SRC
 
-** Editor tools
-
-- windresize :: Permite cambiar el tamaño de las ventanas utilizando las flechas del teclado
-
-- mwe-log-commands :: Permite tener un buffer donde se van logueando todos los comandos que se ejecutan en el editor
-
-- buffer-move :: Permite intercambiar los buffers del editor (izq<>der, arriba<>abajo)
-
-#+BEGIN_SRC emacs-lisp
-(use-package windresize :ensure t)
-(use-package mwe-log-commands :ensure t)
-(use-package buffer-move
-  :ensure t
-  :bind (("s-<left>" . buf-move-left)
-         ("s-<right>" . buf-move-right)
-         ("s-<up>" . buf-move-up)
-         ("s-<down>" . buf-move-down)))
-#+END_SRC
-
 * TODO Paquetes para evaluar
 ** Ledger mode + Org mode
 
