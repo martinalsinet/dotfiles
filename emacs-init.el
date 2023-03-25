@@ -67,3 +67,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(term ((t (:inherit default :background "#3F3F3F" :foreground "#DCDCCC")))))
+(put 'upcase-region 'disabled nil)
