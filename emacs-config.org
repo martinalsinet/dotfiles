@@ -182,6 +182,16 @@ Con TRAMP se puede acceder a cualquier archivo en servidores remotos de manera t
 (setenv "TERM" "xterm-256color")
 #+end_src
 
+** Desactivar Ctrl+Z
+
+https://www.fettesps.com/emacs-disable-suspend-button/
+
+#+begin_src elisp
+;; Unbind Pesky Sleep Button
+(global-unset-key [(control z)])
+(global-unset-key [(control x)(control z)])
+#+end_src
+
 * Apariencia
 
   En esta sección puse las preferencias que tienen que ver con el aspecto visual del editor. Ya sea que use Emacs desde una consola o desde el modo gráfico nativo, me manejo para todo con el teclado, entonces no necesito ocupar espacio de la pantalla con barras de menú o herramientas, y además desactivo todos los sonidos y el parpadeo del cursor porque me parecen extremadamente molestos.
