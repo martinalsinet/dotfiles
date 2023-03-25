@@ -120,39 +120,6 @@
 
 Cuando se utiliza emacs en modo gráfico hay algunas variables del entorno que no están disponibles de la misma manera que cuando se usa desde la terminal.
 
-** Path
-
-Me encontré con el problema que cuando usaba Emacs en modo gráfico desde Mac OS X a menudo tenía problemas para lanzar programas de consola desde el editor. Sin embargo, si inicio Emacs desde la consola el problema no aparece. Primero pensé que era un problema del PATH, pero luego me di cuenta de que además del PATH es necesario configurar la variable /exec-path/.
-
-#+BEGIN_SRC emacs-lisp
-(setenv "PATH"
-        (concat (getenv "PATH")
-                ":/usr/local/bin:~/bin"))
-(setq exec-path 
-      (append exec-path 
-              '("/usr/local/bin" "~/bin")))
-#+END_SRC
-
-En [[https://emacs.stackexchange.com/questions/550/exec-path-and-path][Emacs Stack Exchange]] encontré la explicación de este comportamiento:
-
-#+BEGIN_QUOTE
-*3) Mac OS' PATH*
-The problem on Mac OS X is that Mac OS does not set the environment the same when you call a program from the global UI or when you call it from a shell. This means that running Emacs from a shell will result in different environment variables being set than when you run it from the finder. This is especially annoying if you set environment variables in .bashrc or similar, as that won't affect the "global" Emacs.
-#+END_QUOTE
-
-En [[http://ergoemacs.org/emacs/emacs_env_var_paths.html][ErgoEmacs]], además, encontré la diferencia entre /PATH/ y /exec-path/:
-
-#+BEGIN_QUOTE
-Emacs has a variable named exec-path. Its value is a list of dir paths. Emacs uses exec-path to find executable binary programs. For example, when spell checking, emacs will try to find ispell or aspell in exec-path. When you press Z to compress file in dired, emacs will try to find gzip or gunzip in exec-path. When you call any of emacs commands: {diff, grep, shell}, emacs will try to find the program in exec-path too.
-
-/If emacs complains that it cannot find ispell, aspell, ftp, gzip, etc, the problem is probably with your exec-path/.
-
-*Difference between exec-path and PATH*
-
-- The value of environment variable “PATH” is used by emacs when you are running a shell in emacs, similar to when you are using a shell in a terminal.
-- The exec-path is used by emacs itself to find programs it needs for its features, such as spell checking, file compression, compiling, grep, diff, etc.
-#+END_QUOTE
-
 ** GPG
 
 #+BEGIN_SRC emacs-lisp
