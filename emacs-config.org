@@ -1028,11 +1028,7 @@ El primero tenía un bug que no permite ejecutar los bloques de código PHP y es
 El segundo funciona bien, pero no está disponible en MELPA, así hay que instalarlo manualmente con el siguiente bloque:
 
 #+BEGIN_SRC emacs-lisp
-(unless (require 'ob-php nil 'noerror)
-  (with-temp-buffer
-    (url-insert-file-contents "https://framagit.org/steckerhalter/ob-php/raw/master/ob-php.el")
-    (eval-buffer)))
-(require 'ob-php)
+(use-package ob-php :ensure t)
 #+END_SRC
 
 Para cambiar el intérprete de PHP que usa org-mode es necesario configurar el nombre del comando en la variable =org-babel-php-command=.
