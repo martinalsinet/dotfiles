@@ -64,7 +64,7 @@
 
 * Repositorios de Paquetes
 
-  Esta sección configura las fuentes de paquetes que utiliza el editor. Se agrega el repositorio de MELPA (melpa.org) al listado de paquetes por defecto (elpa.gnu.org). Además se instala el paquete *use-package* (si aún no ha sido instalado) que simplifica la carga y el uso de paquetes en el resto del archivo de configuración.
+Esta sección configura las fuentes de paquetes que utiliza el editor. Se agrega el repositorio de MELPA (melpa.org) al listado de paquetes por defecto (elpa.gnu.org). Además se instala el paquete *use-package* (si aún no ha sido instalado) que simplifica la carga y el uso de paquetes en el resto del archivo de configuración.
 
 #+BEGIN_SRC emacs-lisp
 (require 'package)
@@ -236,12 +236,10 @@ Cuando uso Emacs desde la consola puedo controlar el tamaño de fuente con el te
 *** Themes disponibles
 
 - [[https://emacsthemes.com/themes/zenburn-theme.html][zenburn]] (default, dark)
-- [[https://emacsthemes.com/themes/github-theme.html][github]] (light)
 - [[https://emacsthemes.com/themes/leuven-theme.html][leuven]] (light)
 
 #+BEGIN_SRC emacs-lisp
 (use-package zenburn-theme :ensure t)
-(use-package github-theme :ensure t)
 (use-package leuven-theme :ensure t)
 #+END_SRC
 
