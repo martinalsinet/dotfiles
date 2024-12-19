@@ -331,7 +331,7 @@ Switch Theme ([[https://www.reddit.com/r/emacs/comments/30b67j/how_can_you_reset
 (size-indication-mode t)
 #+END_SRC
 
-* Lenguajes de Programación
+* Programación
 ** Web Mode
 
 #+BEGIN_SRC emacs-lisp
@@ -598,6 +598,13 @@ Muestra los archivos de configuración de apache (httpd.conf, .htaccess) con la 
 
 #+BEGIN_SRC emacs-lisp
 (use-package apache-mode :ensure t)
+#+END_SRC
+
+** Restclient
+
+#+BEGIN_SRC emacs-lisp
+(use-package restclient :ensure t)
+(use-package ob-restclient :ensure t)
 #+END_SRC
 
 * Movimiento del Cursor
@@ -1054,6 +1061,7 @@ Para cambiar el intérprete de PHP que usa org-mode es necesario configurar el n
             (sqlite . t)
             (sql . t)
             (java . t)
+            (restclient . t)
             (emacs-lisp . t))))
 
 ;; don't ask for confirmation to run code block

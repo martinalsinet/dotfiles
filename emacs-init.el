@@ -47,7 +47,7 @@
  '(hl-sexp-background-color "#efebe9")
  '(magit-diff-use-overlays nil)
  '(package-selected-packages
-   '(ob-php org-tree-slide markdown-toc php-mode web-mode py-autopep8 org-toc toc-org prettier-js material-theme solarized-theme try counsel apache-mode org-bullets org-plus-contrib tango-plus-theme professional-theme expand-region skewer-mode impatient-mode simple-httpd emmet-mode js2-mode htmlize org-present bash-completion buffer-move dockerfile-mode flx-ido projectile geiser zenburn-theme yaml-mode windresize wiki-summary web-mode-edit-element w3m use-package smex ox-latex-chinese mwe-log-commands multi-web-mode markdown-mode magit json-mode auctex))
+   '(ob-restclient restclient ob-php org-tree-slide markdown-toc php-mode web-mode py-autopep8 org-toc toc-org prettier-js material-theme solarized-theme try counsel apache-mode org-bullets org-plus-contrib tango-plus-theme professional-theme expand-region skewer-mode impatient-mode simple-httpd emmet-mode js2-mode htmlize org-present bash-completion buffer-move dockerfile-mode flx-ido projectile geiser zenburn-theme yaml-mode windresize wiki-summary web-mode-edit-element w3m use-package smex ox-latex-chinese mwe-log-commands multi-web-mode markdown-mode magit json-mode auctex))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(safe-local-variable-values '((geiser-scheme-implementation quote mit) n))
